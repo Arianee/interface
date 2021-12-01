@@ -3,7 +3,7 @@ import { Trans } from '@lingui/macro'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import { useStakingContract } from '../../hooks/useContract'
+import {useStakingContract, useVaultContract} from '../../hooks/useContract'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { StakingInfo } from '../../state/stake/hooks'
 import { TransactionType } from '../../state/transactions/actions'
@@ -15,6 +15,7 @@ import FormattedCurrencyAmount from '../FormattedCurrencyAmount'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
 import { RowBetween } from '../Row'
+import {VaultInfo} from "../../state/vault/hooks";
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -24,7 +25,7 @@ const ContentWrapper = styled(AutoColumn)`
 interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
-  stakingInfo: StakingInfo
+  stakingInfo: VaultInfo
 }
 
 export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
@@ -41,18 +42,18 @@ export default function UnstakingModal({ isOpen, onDismiss, stakingInfo }: Staki
     onDismiss()
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  const vaultContract = useVaultContract(stakingInfo.stakingRewardAddress)
 
   async function onWithdraw() {
-    if (stakingContract && stakingInfo?.stakedAmount) {
+    if (vaultContract && stakingInfo?.stakedAmount) {
       setAttempting(true)
-      await stakingContract
-        .exit({ gasLimit: 300000 })
+      await vaultContract
+        .claim({ gasLimit: 300000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.WITHDRAW_LIQUIDITY_STAKING,
             token0Address: stakingInfo.tokens[0].address,
-            token1Address: stakingInfo.tokens[1].address,
+            token1Address: stakingInfo.tokens[0].address,
           })
           setHash(response.hash)
         })

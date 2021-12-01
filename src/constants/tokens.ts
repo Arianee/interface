@@ -142,10 +142,20 @@ export const UNI: { [chainId: number]: Token } = {
   [SupportedChainId.ROPSTEN]: new Token(SupportedChainId.ROPSTEN, UNI_ADDRESS[3], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.GOERLI]: new Token(SupportedChainId.GOERLI, UNI_ADDRESS[5], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.KOVAN]: new Token(SupportedChainId.KOVAN, UNI_ADDRESS[42], 18, 'UNI', 'Uniswap'),
+  [SupportedChainId.POLYGON]: new Token(SupportedChainId.POLYGON, '0x9c78ee466d6cb57a4d01fd887d2b5dfb2d46288f', 18, 'MUST', 'MUST'),
+  [SupportedChainId.SOKOL]: new Token(SupportedChainId.SOKOL, '0x9e0e71D45f3344c54305c303831813F6C2B9CA5b', 18, 'WETH aria', 'WETH aria'),
+
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {
   ...WETH9,
+  [SupportedChainId.SOKOL]: new Token(
+    SupportedChainId.SOKOL,
+    '0x9e0e71D45f3344c54305c303831813F6C2B9CA5b',
+    18,
+    'WETH aria',
+    'Wrapped Ether SOKOL/ARIA'
+  ),  
   [SupportedChainId.OPTIMISM]: new Token(
     SupportedChainId.OPTIMISM,
     '0x4200000000000000000000000000000000000006',
@@ -173,6 +183,13 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     18,
     'WETH',
     'Wrapped Ether'
+  ),
+  [SupportedChainId.POLYGON]: new Token(
+    SupportedChainId.POLYGON,
+    '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    18,
+    'WMATIC',
+    'Wrapped Matic'
   ),
 }
 

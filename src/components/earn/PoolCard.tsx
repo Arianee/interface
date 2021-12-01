@@ -1,22 +1,22 @@
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import {Trans} from '@lingui/macro'
+import {CurrencyAmount, Token} from '@uniswap/sdk-core'
 import JSBI from 'jsbi'
 import styled from 'styled-components/macro'
 
-import { BIG_INT_SECONDS_IN_WEEK } from '../../constants/misc'
-import { useColor } from '../../hooks/useColor'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
+import {BIG_INT_SECONDS_IN_WEEK} from '../../constants/misc'
+import {useColor} from '../../hooks/useColor'
+import {useDifferenceInDays} from '../../hooks/useDifferenceInDays'
+import {useTotalSupply} from '../../hooks/useTotalSupply'
 import useUSDCPrice from '../../hooks/useUSDCPrice'
-import { useV2Pair } from '../../hooks/useV2Pairs'
-import { StakingInfo } from '../../state/stake/hooks'
-import { StyledInternalLink, TYPE } from '../../theme'
-import { currencyId } from '../../utils/currencyId'
-import { unwrappedToken } from '../../utils/unwrappedToken'
-import { ButtonPrimary } from '../Button'
-import { AutoColumn } from '../Column'
+import {useV2Pair} from '../../hooks/useV2Pairs'
+import {VaultInfo} from '../../state/vault/hooks'
+import {StyledInternalLink, TYPE} from '../../theme'
+import {unwrappedToken} from '../../utils/unwrappedToken'
+import {ButtonPrimary} from '../Button'
+import {AutoColumn} from '../Column'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import { RowBetween } from '../Row'
-import { Break, CardBGImage, CardNoise } from './styled'
+import {RowBetween} from '../Row'
+import {Break, CardBGImage, CardNoise} from './styled'
 
 const StatContainer = styled.div`
   display: flex;
@@ -70,43 +70,19 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
   z-index: 1;
 `
 
-export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) {
-  const token0 = stakingInfo.tokens[0]
-  const token1 = stakingInfo.tokens[1]
+export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
+  const token0 = vaultInfo.tokens[0]
 
   const currency0 = unwrappedToken(token0)
-  const currency1 = unwrappedToken(token1)
 
-  const isStaking = Boolean(stakingInfo.stakedAmount.greaterThan('0'))
+  const isStaking = Boolean(vaultInfo.stakedAmount.greaterThan('0'))
+  const backgroundColor = useColor(token0)
 
-  // get the color of the token
-  const token = currency0.isNative ? token1 : token0
-  const WETH = currency0.isNative ? token0 : token1
-  const backgroundColor = useColor(token)
+  const totalSupplyOfStakingToken = useTotalSupply(vaultInfo.stakedAmount.currency)
+  const [, stakingTokenPair] = useV2Pair(...vaultInfo.tokens)
 
-  const totalSupplyOfStakingToken = useTotalSupply(stakingInfo.stakedAmount.currency)
-  const [, stakingTokenPair] = useV2Pair(...stakingInfo.tokens)
-
-  // let returnOverMonth: Percent = new Percent('0')
-  let valueOfTotalStakedAmountInWETH: CurrencyAmount<Token> | undefined
-  if (totalSupplyOfStakingToken && stakingTokenPair) {
-    // take the total amount of LP tokens staked, multiply by ETH value of all LP tokens, divide by all LP tokens
-    valueOfTotalStakedAmountInWETH = CurrencyAmount.fromRawAmount(
-      WETH,
-      JSBI.divide(
-        JSBI.multiply(
-          JSBI.multiply(stakingInfo.totalStakedAmount.quotient, stakingTokenPair.reserveOf(WETH).quotient),
-          JSBI.BigInt(2) // this is b/c the value of LP shares are ~double the value of the WETH they entitle owner to
-        ),
-        totalSupplyOfStakingToken.quotient
-      )
-    )
-  }
-
-  // get the USD value of staked WETH
-  const USDPrice = useUSDCPrice(WETH)
-  const valueOfTotalStakedAmountInUSDC =
-    valueOfTotalStakedAmountInWETH && USDPrice?.quote(valueOfTotalStakedAmountInWETH)
+  const differenceInDays = useDifferenceInDays(vaultInfo?.vaultGenesis, vaultInfo?.periodFinish)
+  const remainingPeriod = useDifferenceInDays(new Date(), vaultInfo?.periodFinish)
 
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -114,12 +90,12 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       <CardNoise />
 
       <TopSection>
-        <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={24} />
+        <DoubleCurrencyLogo currency0={currency0} size={24} />
         <TYPE.white fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
-          {currency0.symbol}-{currency1.symbol}
+          {currency0.symbol}
         </TYPE.white>
 
-        <StyledInternalLink to={`/uni/${currencyId(currency0)}/${currencyId(currency1)}`} style={{ width: '100%' }}>
+        <StyledInternalLink to={`/uni/${vaultInfo?.stakingRewardAddress}`} style={{ width: '100%' }}>
           <ButtonPrimary padding="8px" $borderRadius="8px">
             {isStaking ? <Trans>Manage</Trans> : <Trans>Deposit</Trans>}
           </ButtonPrimary>
@@ -129,29 +105,62 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
       <StatContainer>
         <RowBetween>
           <TYPE.white>
-            <Trans>Total deposited</Trans>
+            <Trans>Launch Date</Trans>
           </TYPE.white>
           <TYPE.white>
-            {valueOfTotalStakedAmountInUSDC ? (
-              <Trans>${valueOfTotalStakedAmountInUSDC.toFixed(0, { groupSeparator: ',' })}</Trans>
-            ) : (
-              <Trans>{valueOfTotalStakedAmountInWETH?.toSignificant(4, { groupSeparator: ',' }) ?? '-'} ETH</Trans>
-            )}
+            {vaultInfo?.vaultGenesis?.toLocaleDateString('en', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}{' '}
           </TYPE.white>
         </RowBetween>
         <RowBetween>
           <TYPE.white>
-            <Trans>Pool rate</Trans>
+            <Trans>Total deposited</Trans>
           </TYPE.white>
           <TYPE.white>
-            {stakingInfo ? (
-              stakingInfo.active ? (
+            {vaultInfo?.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
+          </TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white>
+            <Trans>Vault Limit</Trans>
+          </TYPE.white>
+          <TYPE.white>{vaultInfo?.vaultLimit.toFixed(0, { groupSeparator: ',' })}</TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white>
+            <Trans>Availaible limit</Trans>
+          </TYPE.white>
+          <TYPE.white>{vaultInfo?.availableLimit.toFixed(0, { groupSeparator: ',' })}</TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white>
+            <Trans>Maturity Period</Trans>
+          </TYPE.white>
+          <TYPE.white>{differenceInDays} days</TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white>
+            <Trans>Remaining Period</Trans>
+          </TYPE.white>
+          <TYPE.white>{remainingPeriod} days</TYPE.white>
+        </RowBetween>
+        <RowBetween>
+          <TYPE.white>
+            <Trans>APR</Trans>
+          </TYPE.white>
+          <TYPE.white>
+            {vaultInfo ? (
+              vaultInfo.active ? (
                 <Trans>
-                  {stakingInfo.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
-                  UNI / week
+                  {vaultInfo.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(2, { groupSeparator: ',' })}{' '}
+                  Aria / week
                 </Trans>
               ) : (
-                <Trans>0 UNI / week</Trans>
+                <Trans>0 Aria / week</Trans>
               )
             ) : (
               '-'
@@ -174,16 +183,14 @@ export default function PoolCard({ stakingInfo }: { stakingInfo: StakingInfo }) 
               <span role="img" aria-label="wizard-icon" style={{ marginRight: '0.5rem' }}>
                 ⚡
               </span>
-              {stakingInfo ? (
-                stakingInfo.active ? (
+              {vaultInfo ? (
+                vaultInfo.active ? (
                   <Trans>
-                    {stakingInfo.rewardRate
-                      ?.multiply(BIG_INT_SECONDS_IN_WEEK)
-                      ?.toSignificant(4, { groupSeparator: ',' })}{' '}
-                    UNI / week
+                    {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toSignificant(4, { groupSeparator: ',' })}{' '}
+                    Aria / week
                   </Trans>
                 ) : (
-                  <Trans>0 UNI / week</Trans>
+                  <Trans>0 Aria / week</Trans>
                 )
               ) : (
                 '-'

@@ -268,14 +268,17 @@ export default function Header() {
       <Modal isOpen={showUniBalanceModal} onDismiss={() => setShowUniBalanceModal(false)}>
         <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
       </Modal>
-      <Title href=".">
-        <UniIcon>
+      <Title href=".">plip
+        <UniIcon>plop
           <Logo fill={darkMode ? white : black} width="24px" height="100%" title="logo" />
         </UniIcon>
       </Title>
       <HeaderLinks>
         <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
           <Trans>Swap</Trans>
+        </StyledNavLink>
+        <StyledNavLink id={`staking-nav-link`} to={'/uni'}>
+          <Trans>Aria Staking</Trans>
         </StyledNavLink>
         <StyledNavLink
           id={`pool-nav-link`}

@@ -1,111 +1,51 @@
 import { Interface } from '@ethersproject/abi'
 import { Trans } from '@lingui/macro'
-import { abi as STAKING_REWARDS_ABI } from '@uniswap/liquidity-staker/build/StakingRewards.json'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import { Pair } from '@uniswap/v2-sdk'
+import { abi as VAULT_ABI } from 'abis/vaultAbi.json'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import JSBI from 'jsbi'
 import { ReactNode, useMemo } from 'react'
 
-import { DAI, UNI, WETH9_EXTENDED } from '../../constants/tokens'
+import { UNI } from '../../constants/tokens'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 
-const STAKING_REWARDS_INTERFACE = new Interface(STAKING_REWARDS_ABI)
+const VAULT_REWARDS_INTERFACE = new Interface(VAULT_ABI)
 
-export const STAKING_GENESIS = 1600387200
+const ARIA_ADDRESS = '0x7f8f8bb320629bbD9e815b8C2e0D1CF00d2a427A'
 
-export const REWARDS_DURATION_DAYS = 60
+const stakingRewards77 = [
+  '0xF025B284B20107Ac9f5003626ae1eEB3DAfa380A',
+  '0x5583A2fD7De10398EACBd37Bf3b6E7f4bDD3B20c',
+  '0xDA02b89563949C8a61eA0e827A5094f767611430',
+].map((d) => {
+  const bTOken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
+  return {
+    stakingRewardAddress: d,
+    baseToken: bTOken,
+    tokens: [bTOken],
+  }
+}) as any
 
-const ARIA_ADDRESS = '0x4516f6b36DbcE390316CdC8eF8408A20b516D41a'
-
-export const STAKING_REWARDS_INFO: {
+export const VAULT_REWARDS_INFO: {
   [chainId: number]: {
-    tokens: [Token, Token]
     stakingRewardAddress: string
     baseToken: Token
+    tokens: [Token]
   }[]
 } = {
-  [137]: [
-    {
-      // @ts-ignore
-      tokens: [
-        {
-          decimals: 18,
-          symbol: 'JULIEN',
-          name: 'JULIEN',
-          chainId: 137,
-          address: '0x268ad27c28601d28b79c792c14e95bd2b7a030f8',
-        },
-        {
-          decimals: 18,
-          symbol: 'MUST',
-          name: 'MUST',
-          chainId: 137,
-          address: '0x9c78ee466d6cb57a4d01fd887d2b5dfb2d46288f',
-        },
-      ].map(({ decimals, chainId, symbol, name, address }) => {
-        return new Token(chainId, address, decimals, symbol, name)
-      }),
-      stakingRewardAddress: '0x83bb796fbc69e013726129f768069e456cadea2b',
-    },
-  ],
-  [77]: [
-    {
-      // @ts-ignore
-      tokens: [
-        {
-          decimals: 18,
-          symbol: 'ARIA20',
-          name: 'ARIA20',
-          chainId: 77,
-          address: ARIA_ADDRESS,
-        },
-        {
-          decimals: 18,
-          symbol: 'WETH aria',
-          name: 'WETH aria',
-          chainId: 77,
-          address: '0x9e0e71D45f3344c54305c303831813F6C2B9CA5b',
-        },
-      ].map(({ decimals, chainId, symbol, name, address }) => {
-        return new Token(chainId, address, decimals, symbol, name)
-      }),
-      stakingRewardAddress: '0x2BF274e6535b211a15b3D16254f6b39Bf7D4D795',
-      // @ts-ignore
-      baseToken: {
-        decimals: 18,
-        symbol: 'ARIA20',
-        name: 'ARIA20',
-        chainId: 77,
-        address: ARIA_ADDRESS,
-      },
-    },
-  ],
-  [1]: [
-    {
-      tokens: [WETH9_EXTENDED[1], DAI],
-      stakingRewardAddress: '0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711',
-      // @ts-ignore
-      baseToken: {
-        decimals: 18,
-        symbol: 'ARIA20',
-        name: 'ARIA20',
-        chainId: 77,
-        address: ARIA_ADDRESS,
-      },
-    },
-  ],
+  [137]: [],
+  [77]: stakingRewards77,
 }
 
-export interface StakingInfo {
+export interface VaultInfo {
   // Base Token
   baseToken: Token
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
-  tokens: [Token, Token]
+  tokens: [Token]
   // the amount of token currently staked, or undefined if no account
   stakedAmount: CurrencyAmount<Token>
   // the amount of reward token earned by the active account, or undefined if no account
@@ -119,6 +59,16 @@ export interface StakingInfo {
   rewardRate: CurrencyAmount<Token>
   // when the period ends
   periodFinish: Date | undefined
+  // is vault finished
+  isFinished: boolean
+  // is vault finished
+  isStarted: boolean
+  // vault genesis
+  vaultLimit: CurrencyAmount<Token>
+  // vault limit
+  vaultGenesis: Date | undefined
+  // availableLimit
+  availableLimit: CurrencyAmount<Token>
   // if pool is active
   active: boolean
   // calculates a hypothetical amount of token distributed to the active account per second.
@@ -129,8 +79,10 @@ export interface StakingInfo {
   ) => CurrencyAmount<Token>
 }
 
+const baseToken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
+
 // gets the staking info from the network for the active chain id
-export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInfo[] {
+export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   // detect if staking is ended
@@ -138,34 +90,21 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
   const info = useMemo(
     () =>
       chainId
-        ? STAKING_REWARDS_INFO[chainId]?.filter((stakingRewardInfo) =>
+        ? VAULT_REWARDS_INFO[chainId]?.filter((stakingRewardInfo) =>
             stackingRewarAddress === undefined ? true : stackingRewarAddress === stakingRewardInfo.stakingRewardAddress
           ) ?? []
         : [],
     [chainId, stackingRewarAddress]
   )
 
-  //const uni = chainId ? UNI[chainId] : undefined
-  //const uni = chainId ? undefined : undefined
-  //const uni = new Token(77, '0xAD6d8F17De355D61A224ED6DAEAb7333945ECC0c', 18, 'ARIA20','ARIA20')
-
-  const uni = useMemo(
-    () =>
-      info.map(
-        ({ baseToken }) =>
-          new Token(baseToken.chainId, baseToken.address, baseToken.decimals, baseToken.symbol, baseToken.name)
-      ),
-    [info]
-  )[0]
   const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
 
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
-  const baseToken = uni
   // get all the info from the staking rewards contracts
   const balances = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_INTERFACE,
+    VAULT_REWARDS_INTERFACE,
     'balanceOf',
     accountArg,
     NEVER_RELOAD
@@ -173,14 +112,14 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
 
   const earnedAmounts = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_INTERFACE,
+    VAULT_REWARDS_INTERFACE,
     'earned',
     accountArg,
     NEVER_RELOAD
   )
   const totalSupplies = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_INTERFACE,
+    VAULT_REWARDS_INTERFACE,
     'totalSupply',
     undefined,
     NEVER_RELOAD
@@ -189,23 +128,47 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
 
   const rewardRates = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_INTERFACE,
+    VAULT_REWARDS_INTERFACE,
     'rewardRate',
     undefined,
     NEVER_RELOAD
   )
   const periodFinishes = useMultipleContractSingleData(
     rewardsAddresses,
-    STAKING_REWARDS_INTERFACE,
+    VAULT_REWARDS_INTERFACE,
     'periodFinish',
     undefined,
     NEVER_RELOAD
   )
 
-  return useMemo(() => {
-    if (!chainId || !uni) return []
+  const periodStarts = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'vaultGenesis',
+    undefined,
+    NEVER_RELOAD
+  )
 
-    return rewardsAddresses.reduce<StakingInfo[]>((memo, rewardsAddress, index) => {
+  const vaultLimits = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'vaultLimit',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  const vaultGenesises = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'vaultGenesis',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  return useMemo(() => {
+    if (!chainId || !baseToken) return []
+
+    return rewardsAddresses.reduce<VaultInfo[]>((memo, rewardsAddress, index) => {
       // these two are dependent on account
       const balanceState = balances[index]
       const earnedAmountState = earnedAmounts[index]
@@ -214,6 +177,11 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
       const periodFinishState = periodFinishes[index]
+      const periodStartState = periodStarts[index]
+
+      const vaultLimitState = vaultLimits[index]
+      const vaultGenesisState = vaultGenesises[index]
+
       if (
         // these may be undefined if not logged in
         !balanceState?.loading &&
@@ -237,14 +205,11 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
           return memo
         }
 
-        // get the LP token
-        const tokens = info[index].tokens
-
         // check for account, if no account set to 0
-        const stakedAmount = CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
-        const totalStakedAmount = CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(totalSupplyState.result?.[0]))
-
-        const totalRewardRate = CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(rewardRateState.result?.[0]))
+        const stakedAmount = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
+        const totalStakedAmount = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(totalSupplyState.result?.[0]))
+        const totalRewardRate = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(rewardRateState.result?.[0]))
+        const vaultLimit = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(vaultLimitState.result?.[0]))
 
         const getHypotheticalRewardRate = (
           stakedAmount: CurrencyAmount<Token>,
@@ -252,7 +217,7 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
           totalRewardRate: CurrencyAmount<Token>
         ): CurrencyAmount<Token> => {
           return CurrencyAmount.fromRawAmount(
-            uni,
+            baseToken,
             JSBI.greaterThan(totalStakedAmount.quotient, JSBI.BigInt(0))
               ? JSBI.divide(JSBI.multiply(totalRewardRate.quotient, stakedAmount.quotient), totalStakedAmount.quotient)
               : JSBI.BigInt(0)
@@ -264,22 +229,40 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
         const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
         const periodFinishMs = periodFinishSeconds * 1000
 
-        // compare period end timestamp vs current block timestamp (in seconds)
-        const active =
-          periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
+        const periodStartSeconds = periodStartState.result?.[0]?.toNumber()
 
-        console.error(`${periodFinishSeconds} && ${currentBlockTimestamp}  &&   ${periodFinishSeconds}` )
+        const isStarted =
+          periodStartSeconds && currentBlockTimestamp ? periodStartSeconds < currentBlockTimestamp.toNumber() : true
+        const isFinished =
+          periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds < currentBlockTimestamp.toNumber() : true
+
+        // compare period end timestamp vs current block timestamp (in seconds)
+        const active = isStarted && !isFinished
+
+        const vaultGenesisInMS = vaultGenesisState ? vaultGenesisState.result?.[0] * 1000 : 0
+        CurrencyAmount.fromRawAmount(baseToken, '0')
+
+        const availableLimit =
+          vaultLimit && totalStakedAmount
+            ? vaultLimit.subtract(totalStakedAmount)
+            : CurrencyAmount.fromRawAmount(baseToken, '0')
+
         memo.push({
           stakingRewardAddress: rewardsAddress,
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
-          earnedAmount: CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          earnedAmount: CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate,
           stakedAmount,
           totalStakedAmount,
           getHypotheticalRewardRate,
           active,
+          isStarted,
+          isFinished,
+          vaultLimit,
+          availableLimit,
+          vaultGenesis: vaultGenesisInMS > 0 ? new Date(vaultGenesisInMS) : undefined,
           baseToken,
         })
       }
@@ -295,7 +278,6 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
     rewardRates,
     rewardsAddresses,
     totalSupplies,
-    uni,
     baseToken,
   ])
 }
@@ -303,7 +285,7 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
 export function useTotalUniEarned(): CurrencyAmount<Token> | undefined {
   const { chainId } = useActiveWeb3React()
   const uni = chainId ? UNI[chainId] : undefined
-  const stakingInfos = useStakingInfo()
+  const stakingInfos = useVaultInfo()
 
   return useMemo(() => {
     if (!uni) return undefined

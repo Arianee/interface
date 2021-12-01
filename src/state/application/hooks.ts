@@ -8,7 +8,6 @@ import { addPopup, ApplicationModal, PopupContent, removePopup, setOpenModal } f
 
 export function useBlockNumber(): number | undefined {
   const { chainId } = useActiveWeb3React()
-
   return useAppSelector((state: AppState) => state.application.blockNumber[chainId ?? -1])
 }
 

@@ -14,6 +14,8 @@ interface LogoProps extends Pick<ImageProps, 'style' | 'alt' | 'className'> {
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert
  */
 export default function Logo({ srcs, alt, style, ...rest }: LogoProps) {
+
+  console.log('logo')
   const [, refresh] = useState<number>(0)
 
   const theme = useTheme()
@@ -34,6 +36,8 @@ export default function Logo({ srcs, alt, style, ...rest }: LogoProps) {
       />
     )
   }
+
+  console.log('rest',rest)
 
   return <Slash {...rest} style={{ ...style, color: theme.bg4 }} />
 }

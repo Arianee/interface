@@ -10,6 +10,8 @@ import { abi as MulticallABI } from '@uniswap/v3-periphery/artifacts/contracts/l
 import { abi as NFTPositionManagerABI } from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json'
 import { abi as V2MigratorABI } from '@uniswap/v3-periphery/artifacts/contracts/V3Migrator.sol/V3Migrator.json'
 import ARGENT_WALLET_DETECTOR_ABI from 'abis/argent-wallet-detector.json'
+import {abi as VAULT_ABI} from 'abis/vaultAbi.json'
+
 import EIP_2612 from 'abis/eip_2612.json'
 import ENS_PUBLIC_RESOLVER_ABI from 'abis/ens-public-resolver.json'
 import ENS_ABI from 'abis/ens-registrar.json'
@@ -140,6 +142,9 @@ export function useUniContract() {
   return useContract(chainId ? UNI[chainId]?.address : undefined, UNI_ABI, true)
 }
 
+export function useVaultContract(vaultAddress?: string, withSignerIfPossible?: boolean) {
+  return useContract(vaultAddress, VAULT_ABI, withSignerIfPossible)
+}
 export function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean) {
   return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
 }

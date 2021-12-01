@@ -3,7 +3,7 @@ import { Trans } from '@lingui/macro'
 import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import { useStakingContract } from '../../hooks/useContract'
+import { useVaultContract } from '../../hooks/useContract'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { StakingInfo } from '../../state/stake/hooks'
 import { TransactionType } from '../../state/transactions/actions'
@@ -14,6 +14,7 @@ import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
 import { RowBetween } from '../Row'
+import {VaultInfo} from "../../state/vault/hooks";
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -23,7 +24,7 @@ const ContentWrapper = styled(AutoColumn)`
 interface StakingModalProps {
   isOpen: boolean
   onDismiss: () => void
-  stakingInfo: StakingInfo
+  stakingInfo: VaultInfo
 }
 
 export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: StakingModalProps) {
@@ -40,13 +41,13 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     onDismiss()
   }
 
-  const stakingContract = useStakingContract(stakingInfo.stakingRewardAddress)
+  const vaultContract = useVaultContract(stakingInfo.stakingRewardAddress)
 
   async function onClaimReward() {
-    if (stakingContract && stakingInfo?.stakedAmount && account) {
+    if (vaultContract && stakingInfo?.stakedAmount && account) {
       setAttempting(true)
-      await stakingContract
-        .getReward({ gasLimit: 350000 })
+      await vaultContract
+        .claim({ gasLimit: 350000 })
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.CLAIM,

@@ -1,18 +1,16 @@
-import { Trans } from '@lingui/macro'
-import JSBI from 'jsbi'
+import {Trans} from '@lingui/macro'
 import styled from 'styled-components/macro'
 
-import { OutlineCard } from '../../components/Card'
-import { AutoColumn } from '../../components/Column'
+import {OutlineCard} from '../../components/Card'
+import {AutoColumn} from '../../components/Column'
 import PoolCard from '../../components/earn/PoolCard'
-import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled'
+import {CardBGImage, CardNoise, CardSection, DataCard} from '../../components/earn/styled'
 import Loader from '../../components/Loader'
-import { RowBetween } from '../../components/Row'
-import { BIG_INT_ZERO } from '../../constants/misc'
-import { useActiveWeb3React } from '../../hooks/web3'
-import { STAKING_REWARDS_INFO, useStakingInfo } from '../../state/stake/hooks'
-import { ExternalLink, TYPE } from '../../theme'
-import { Countdown } from './Countdown'
+import {RowBetween} from '../../components/Row'
+import {useActiveWeb3React} from '../../hooks/web3'
+import {useVaultInfo, VAULT_REWARDS_INFO} from '../../state/vault/hooks'
+import {ExternalLink, TYPE} from '../../theme'
+import {Countdown} from './Countdown'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -43,16 +41,17 @@ export default function Earn() {
   const { chainId } = useActiveWeb3React()
 
   // staking info for connected account
-  const stakingInfos = useStakingInfo()
+  const stakingInfos = useVaultInfo()
 
   /**
    * only show staking cards with balance
    * @todo only account for this if rewards are inactive
    */
-  const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.quotient, BIG_INT_ZERO))
 
+  //const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.quotient, BIG_INT_ZERO))
+  const stakingInfosWithBalance = stakingInfos
   // toggle copy if rewards are inactive
-  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (STAKING_REWARDS_INFO[chainId]?.length ?? 0) > 0)
+  const stakingRewardsExist = Boolean(typeof chainId === 'number' && (VAULT_REWARDS_INFO[chainId]?.length ?? 0) > 0)
 
   return (
     <PageWrapper gap="lg" justify="center">
@@ -112,7 +111,7 @@ export default function Earn() {
           ) : (
             stakingInfosWithBalance?.map((stakingInfo) => {
               // need to sort by added liquidity here
-              return <PoolCard key={stakingInfo.stakingRewardAddress} stakingInfo={stakingInfo} />
+              return <PoolCard key={stakingInfo.stakingRewardAddress} vaultInfo={stakingInfo} />
             })
           )}
         </PoolSection>

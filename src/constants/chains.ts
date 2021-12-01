@@ -3,7 +3,7 @@ import arbitrumLogoUrl from 'assets/svg/arbitrum_logo.svg'
 import optimismLogoUrl from 'assets/svg/optimistic_ethereum.svg'
 import ms from 'ms.macro'
 
-import { ARBITRUM_LIST, OPTIMISM_LIST } from './lists'
+import {ARBITRUM_LIST, OPTIMISM_LIST, POLYGON_LIST} from './lists'
 
 export enum SupportedChainId {
   MAINNET = 1,
@@ -16,6 +16,9 @@ export enum SupportedChainId {
   ARBITRUM_RINKEBY = 421611,
   OPTIMISM = 10,
   OPTIMISTIC_KOVAN = 69,
+  POLYGON = 137,
+  SOKOL = 77,
+
 }
 
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = [
@@ -29,6 +32,9 @@ export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = [
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.OPTIMISM,
   SupportedChainId.OPTIMISTIC_KOVAN,
+  SupportedChainId.POLYGON,
+  SupportedChainId.SOKOL,
+
 ]
 
 export const L1_CHAIN_IDS = [
@@ -37,6 +43,7 @@ export const L1_CHAIN_IDS = [
   SupportedChainId.RINKEBY,
   SupportedChainId.GOERLI,
   SupportedChainId.KOVAN,
+
 ] as const
 
 export type SupportedL1ChainId = typeof L1_CHAIN_IDS[number]
@@ -46,6 +53,9 @@ export const L2_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.OPTIMISM,
   SupportedChainId.OPTIMISTIC_KOVAN,
+  SupportedChainId.POLYGON,
+  SupportedChainId.SOKOL,
+
 ] as const
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number]
@@ -77,6 +87,30 @@ export type ChainInfo = { readonly [chainId: number]: L1ChainInfo | L2ChainInfo 
   { readonly [chainId in SupportedL1ChainId]: L1ChainInfo }
 
 export const CHAIN_INFO: ChainInfo = {
+  [SupportedChainId.SOKOL]: {
+    blockWaitMsBeforeWarning: ms`10m`,
+    bridge: 'https://bridge.arbitrum.io/',
+    defaultListUrl: POLYGON_LIST,
+    docs: 'https://offchainlabs.com/',
+    explorer: 'https://arbiscan.io/',
+    infoLink: 'https://info.uniswap.org/#/arbitrum/',
+    label: 'SOKOL',
+    logoUrl: arbitrumLogoUrl,
+    nativeCurrency: { name: 'SMATIC', symbol: 'smatic', decimals: 18 },
+    rpcUrls: [],
+  },
+  [SupportedChainId.POLYGON]: {
+    blockWaitMsBeforeWarning: ms`10m`,
+    bridge: 'https://bridge.arbitrum.io/',
+    defaultListUrl: POLYGON_LIST,
+    docs: 'https://offchainlabs.com/',
+    explorer: 'https://arbiscan.io/',
+    infoLink: 'https://info.uniswap.org/#/arbitrum/',
+    label: 'POLYGON',
+    logoUrl: arbitrumLogoUrl,
+    nativeCurrency: { name: 'MATIC', symbol: 'matic', decimals: 18 },
+    rpcUrls: ['https://speedy-nodes-nyc.moralis.io/337ce5317ffe1f66093a6c3b/polygon/mainnet'],
+  },
   [SupportedChainId.ARBITRUM_ONE]: {
     blockWaitMsBeforeWarning: ms`10m`,
     bridge: 'https://bridge.arbitrum.io/',

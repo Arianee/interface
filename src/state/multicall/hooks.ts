@@ -1,13 +1,13 @@
-import { FunctionFragment, Interface } from '@ethersproject/abi'
-import { BigNumber } from '@ethersproject/bignumber'
-import { Contract } from '@ethersproject/contracts'
-import { useEffect, useMemo } from 'react'
-import { useAppDispatch, useAppSelector } from 'state/hooks'
+import {FunctionFragment, Interface} from '@ethersproject/abi'
+import {BigNumber} from '@ethersproject/bignumber'
+import {Contract} from '@ethersproject/contracts'
+import {useEffect, useMemo} from 'react'
+import {useAppDispatch, useAppSelector} from 'state/hooks'
 
-import { useActiveWeb3React } from '../../hooks/web3'
-import { useBlockNumber } from '../application/hooks'
-import { addMulticallListeners, ListenerOptions, removeMulticallListeners } from './actions'
-import { Call, parseCallKey, toCallKey } from './utils'
+import {useActiveWeb3React} from '../../hooks/web3'
+import {useBlockNumber} from '../application/hooks'
+import {addMulticallListeners, ListenerOptions, removeMulticallListeners} from './actions'
+import {Call, parseCallKey, toCallKey} from './utils'
 
 export interface Result extends ReadonlyArray<any> {
   readonly [key: string]: any
@@ -284,6 +284,7 @@ export function useSingleContractWithCallData(
   const results = useCallsData(calls, blocksPerFetch ? { blocksPerFetch } : undefined)
 
   const latestBlockNumber = useBlockNumber()
+  console.log('latestBlockNumber',latestBlockNumber)
 
   return useMemo(() => {
     return results.map((result, i) =>

@@ -18,13 +18,10 @@ export const STAKING_GENESIS = 1600387200
 
 export const REWARDS_DURATION_DAYS = 60
 
-const ARIA_ADDRESS = '0x4516f6b36DbcE390316CdC8eF8408A20b516D41a'
-
 export const STAKING_REWARDS_INFO: {
   [chainId: number]: {
     tokens: [Token, Token]
     stakingRewardAddress: string
-    baseToken: Token
   }[]
 } = {
   [137]: [
@@ -60,7 +57,7 @@ export const STAKING_REWARDS_INFO: {
           symbol: 'ARIA20',
           name: 'ARIA20',
           chainId: 77,
-          address: ARIA_ADDRESS,
+          address: '0xAD6d8F17De355D61A224ED6DAEAb7333945ECC0c',
         },
         {
           decimals: 18,
@@ -72,36 +69,18 @@ export const STAKING_REWARDS_INFO: {
       ].map(({ decimals, chainId, symbol, name, address }) => {
         return new Token(chainId, address, decimals, symbol, name)
       }),
-      stakingRewardAddress: '0x2BF274e6535b211a15b3D16254f6b39Bf7D4D795',
-      // @ts-ignore
-      baseToken: {
-        decimals: 18,
-        symbol: 'ARIA20',
-        name: 'ARIA20',
-        chainId: 77,
-        address: ARIA_ADDRESS,
-      },
+      stakingRewardAddress: '0x7B11487b31aa2523551d63A6037eED30B55711D1',
     },
-  ],
+  ],  
   [1]: [
     {
       tokens: [WETH9_EXTENDED[1], DAI],
       stakingRewardAddress: '0xa1484C3aa22a66C62b77E0AE78E15258bd0cB711',
-      // @ts-ignore
-      baseToken: {
-        decimals: 18,
-        symbol: 'ARIA20',
-        name: 'ARIA20',
-        chainId: 77,
-        address: ARIA_ADDRESS,
-      },
     },
   ],
 }
 
 export interface StakingInfo {
-  // Base Token
-  baseToken: Token
   // the address of the reward contract
   stakingRewardAddress: string
   // the tokens involved in this pair
@@ -130,38 +109,34 @@ export interface StakingInfo {
 }
 
 // gets the staking info from the network for the active chain id
-export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInfo[] {
+export function useStakingInfo(pairToFilterBy?: Pair | null): StakingInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
+  console.log('currentBlockTimestamp',currentBlockTimestamp)
   const info = useMemo(
     () =>
       chainId
         ? STAKING_REWARDS_INFO[chainId]?.filter((stakingRewardInfo) =>
-            stackingRewarAddress === undefined ? true : stackingRewarAddress === stakingRewardInfo.stakingRewardAddress
+            pairToFilterBy === undefined
+              ? true
+              : pairToFilterBy === null
+              ? false
+              : pairToFilterBy.involvesToken(stakingRewardInfo.tokens[0]) &&
+                pairToFilterBy.involvesToken(stakingRewardInfo.tokens[1])
           ) ?? []
         : [],
-    [chainId, stackingRewarAddress]
+    [chainId, pairToFilterBy]
   )
 
-  //const uni = chainId ? UNI[chainId] : undefined
+  const uni = chainId ? UNI[chainId] : undefined
   //const uni = chainId ? undefined : undefined
-  //const uni = new Token(77, '0xAD6d8F17De355D61A224ED6DAEAb7333945ECC0c', 18, 'ARIA20','ARIA20')
 
-  const uni = useMemo(
-    () =>
-      info.map(
-        ({ baseToken }) =>
-          new Token(baseToken.chainId, baseToken.address, baseToken.decimals, baseToken.symbol, baseToken.name)
-      ),
-    [info]
-  )[0]
   const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
 
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
-  const baseToken = uni
   // get all the info from the staking rewards contracts
   const balances = useMultipleContractSingleData(
     rewardsAddresses,
@@ -239,12 +214,24 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
 
         // get the LP token
         const tokens = info[index].tokens
+        const dummyPair = new Pair(
+          CurrencyAmount.fromRawAmount(tokens[0], '0'),
+          CurrencyAmount.fromRawAmount(tokens[1], '0')
+        )
 
         // check for account, if no account set to 0
-        const stakedAmount = CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
-        const totalStakedAmount = CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(totalSupplyState.result?.[0]))
 
+        const stakedAmount = CurrencyAmount.fromRawAmount(
+          dummyPair.liquidityToken,
+          JSBI.BigInt(balanceState?.result?.[0] ?? 0)
+        )
+        const totalStakedAmount = CurrencyAmount.fromRawAmount(
+          dummyPair.liquidityToken,
+          JSBI.BigInt(totalSupplyState.result?.[0])
+        )
         const totalRewardRate = CurrencyAmount.fromRawAmount(uni, JSBI.BigInt(rewardRateState.result?.[0]))
+          console.log('totalRewardRate',totalRewardRate.toFixed())
+
 
         const getHypotheticalRewardRate = (
           stakedAmount: CurrencyAmount<Token>,
@@ -268,7 +255,6 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
         const active =
           periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds > currentBlockTimestamp.toNumber() : true
 
-        console.error(`${periodFinishSeconds} && ${currentBlockTimestamp}  &&   ${periodFinishSeconds}` )
         memo.push({
           stakingRewardAddress: rewardsAddress,
           tokens: info[index].tokens,
@@ -280,7 +266,6 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
           totalStakedAmount,
           getHypotheticalRewardRate,
           active,
-          baseToken,
         })
       }
       return memo
@@ -296,7 +281,6 @@ export function useStakingInfo(stackingRewarAddress?: string | Pair): StakingInf
     rewardsAddresses,
     totalSupplies,
     uni,
-    baseToken,
   ])
 }
 
