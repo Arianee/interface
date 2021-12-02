@@ -69,8 +69,10 @@ export function useDarkModeManager(): [boolean, () => void] {
   const toggleSetDarkMode = useCallback(() => {
     dispatch(updateUserDarkMode({ userDarkMode: !darkMode }))
   }, [darkMode, dispatch])
+  
+  return [true, toggleSetDarkMode];
 
-  return [darkMode, toggleSetDarkMode]
+  //return [darkMode, toggleSetDarkMode]
 }
 
 export function useUserLocale(): SupportedLocale | null {

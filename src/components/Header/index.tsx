@@ -262,24 +262,14 @@ export default function Header() {
   const scrollY = useScrollPosition()
 
   const { infoLink } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
-  return (
-    <HeaderFrame showBackground={scrollY > 45}>
-      <ClaimModal />
-      <Modal isOpen={showUniBalanceModal} onDismiss={() => setShowUniBalanceModal(false)}>
-        <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
-      </Modal>
-      <Title href=".">plip
-        <UniIcon>plop
-          <Logo fill={darkMode ? white : black} width="24px" height="100%" title="logo" />
-        </UniIcon>
-      </Title>
-      <HeaderLinks>
-        <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
+  
+  /*
+          <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
           <Trans>Swap</Trans>
         </StyledNavLink>
-        <StyledNavLink id={`staking-nav-link`} to={'/uni'}>
-          <Trans>Aria Staking</Trans>
-        </StyledNavLink>
+  */
+
+        /*
         <StyledNavLink
           id={`pool-nav-link`}
           to={'/pool'}
@@ -302,6 +292,25 @@ export default function Header() {
           <Trans>Charts</Trans>
           <sup>↗</sup>
         </StyledExternalLink>
+        */
+
+  return (
+    <HeaderFrame showBackground={scrollY > 45}>
+      <ClaimModal />
+      <Modal isOpen={showUniBalanceModal} onDismiss={() => setShowUniBalanceModal(false)}>
+        <UniBalanceContent setShowUniBalanceModal={setShowUniBalanceModal} />
+      </Modal>
+      <Title href=".">
+        <UniIcon>
+          <Logo fill={darkMode ? white : black} width="54px" height="100%" title="logo" />
+        </UniIcon>
+      </Title>
+      <HeaderLinks>
+
+        <StyledNavLink id={`staking-nav-link`} to={'/uni'}>
+          <Trans>Aria Staking</Trans>
+        </StyledNavLink>
+        
       </HeaderLinks>
 
       <HeaderControls>
@@ -334,10 +343,16 @@ export default function Header() {
             <Web3Status />
           </AccountElement>
         </HeaderElement>
-        <HeaderElement>
-          <Menu />
-        </HeaderElement>
+        
+
+        
       </HeaderControls>
     </HeaderFrame>
   )
 }
+
+/*
+        //<HeaderElement>
+          //<Menu />
+        //</HeaderElement>
+*/
