@@ -4,6 +4,7 @@ import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 
 import { useVaultContract } from '../../hooks/useContract'
+import { useDifferenceInDays } from '../../hooks/useDifferenceInDays'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
@@ -69,6 +70,8 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     error = error ?? <Trans>Enter an amount</Trans>
   }
 
+  const differenceInDays = useDifferenceInDays(stakingInfo?.vaultGenesis, stakingInfo?.periodFinish)
+
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
       {!attempting && !hash && (
@@ -85,12 +88,12 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
                 {stakingInfo?.earnedAmount?.toSignificant(6)}
               </ThemedText.Body>
               <ThemedText.Body>
-                <Trans>Unclaimed ${stakingInfo?.baseToken.symbol}</Trans>
+                <Trans>Unclaimed {stakingInfo?.baseToken.symbol}</Trans>
               </ThemedText.Body>
             </AutoColumn>
           )}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
-            <Trans>When you claim without withdrawing your liquidity remains in the mining pool.</Trans>
+            <Trans>Tokens staked and rewards can be linearly claimed over a period of {differenceInDays} days</Trans>
           </ThemedText.SubHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onClaimReward}>
             {error ?? <Trans>Claim</Trans>}
