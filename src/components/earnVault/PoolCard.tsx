@@ -46,7 +46,7 @@ const Wrapper = styled(AutoColumn)<{ showBackground: boolean; bgColor: any }>`
 
 const TopSection = styled.div`
   display: grid;
-  grid-template-columns: 48px 1fr 120px;
+  grid-template-columns: 24px 1fr 120px;
   grid-gap: 0px;
   align-items: center;
   padding: 1rem;
