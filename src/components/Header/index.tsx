@@ -270,7 +270,7 @@ export default function Header() {
       </Modal>
       <Title href=".">
         <UniIcon>
-          <Logo fill={darkMode ? white : black} width="24px" height="100%" title="logo" />
+          <Logo fill={darkMode ? white : black} width="70px" height="100%" title="logo" />
         </UniIcon>
       </Title>
       <HeaderLinks>
