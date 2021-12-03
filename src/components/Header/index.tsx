@@ -1,27 +1,27 @@
-import { Trans } from '@lingui/macro'
+import {Trans} from '@lingui/macro'
 import useScrollPosition from '@react-hook/window-scroll'
-import { CHAIN_INFO, SupportedChainId } from 'constants/chains'
+import {CHAIN_INFO, SupportedChainId} from 'constants/chains'
 import useTheme from 'hooks/useTheme'
-import { darken } from 'polished'
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { Text } from 'rebass'
-import { useShowClaimPopup, useToggleSelfClaimModal } from 'state/application/hooks'
-import { useUserHasAvailableClaim } from 'state/claim/hooks'
-import { useUserHasSubmittedClaim } from 'state/transactions/hooks'
-import { useDarkModeManager } from 'state/user/hooks'
-import { useETHBalances } from 'state/wallet/hooks'
+import {darken} from 'polished'
+import {useState} from 'react'
+import {NavLink} from 'react-router-dom'
+import {Text} from 'rebass'
+import {useShowClaimPopup, useToggleSelfClaimModal} from 'state/application/hooks'
+import {useUserHasAvailableClaim} from 'state/claim/hooks'
+import {useUserHasSubmittedClaim} from 'state/transactions/hooks'
+import {useDarkModeManager} from 'state/user/hooks'
+import {useETHBalances} from 'state/wallet/hooks'
 import styled from 'styled-components/macro'
 
-import { ReactComponent as Logo } from '../../assets/svg/logo.svg'
-import { useActiveWeb3React } from '../../hooks/web3'
-import { ExternalLink, ThemedText } from '../../theme'
+import {ReactComponent as Logo} from '../../assets/svg/logo.svg'
+import {useActiveWeb3React} from '../../hooks/web3'
+import {ExternalLink, ThemedText} from '../../theme'
 import ClaimModal from '../claim/ClaimModal'
-import { CardNoise } from '../earn/styled'
+import {CardNoise} from '../earn/styled'
 import Menu from '../Menu'
 import Modal from '../Modal'
 import Row from '../Row'
-import { Dots } from '../swap/styleds'
+import {Dots} from '../swap/styleds'
 import Web3Status from '../Web3Status'
 import NetworkSelector from './NetworkSelector'
 import UniBalanceContent from './UniBalanceContent'
@@ -274,31 +274,9 @@ export default function Header() {
         </UniIcon>
       </Title>
       <HeaderLinks>
-        <StyledNavLink id={`swap-nav-link`} to={'/swap'}>
-          <Trans>Swap</Trans>
+        <StyledNavLink id={`aria-staking-link`} to={'/staking'}>
+          <Trans>Aria Staking</Trans>
         </StyledNavLink>
-        <StyledNavLink
-          id={`pool-nav-link`}
-          to={'/pool'}
-          isActive={(match, { pathname }) =>
-            Boolean(match) ||
-            pathname.startsWith('/add') ||
-            pathname.startsWith('/remove') ||
-            pathname.startsWith('/increase') ||
-            pathname.startsWith('/find')
-          }
-        >
-          <Trans>Pool</Trans>
-        </StyledNavLink>
-        {(!chainId || chainId === SupportedChainId.MAINNET) && (
-          <StyledNavLink id={`vote-nav-link`} to={'/vote'}>
-            <Trans>Vote</Trans>
-          </StyledNavLink>
-        )}
-        <StyledExternalLink id={`charts-nav-link`} href={infoLink}>
-          <Trans>Charts</Trans>
-          <sup>↗</sup>
-        </StyledExternalLink>
       </HeaderLinks>
 
       <HeaderControls>
