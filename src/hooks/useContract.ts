@@ -18,6 +18,8 @@ import ERC20_BYTES32_ABI from 'abis/erc20_bytes32.json'
 import ERC721_ABI from 'abis/erc721.json'
 import ERC1155_ABI from 'abis/erc1155.json'
 import GOVERNOR_BRAVO_ABI from 'abis/governor-bravo.json'
+import { abi as VAULT_REAWARD_ABI } from 'abis/vaultAbi.json'
+
 import WETH_ABI from 'abis/weth.json'
 import {
   ARGENT_WALLET_DETECTOR_ADDRESS,
@@ -142,6 +144,10 @@ export function useUniContract() {
 
 export function useStakingContract(stakingAddress?: string, withSignerIfPossible?: boolean) {
   return useContract(stakingAddress, STAKING_REWARDS_ABI, withSignerIfPossible)
+}
+
+export function useVaultContract(stakingAddress?: string, withSignerIfPossible?: boolean) {
+  return useContract(stakingAddress, VAULT_REAWARD_ABI, withSignerIfPossible)
 }
 
 export function useV3NFTPositionManagerContract(withSignerIfPossible?: boolean): NonfungiblePositionManager | null {

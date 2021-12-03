@@ -1,0 +1,331 @@
+import { Interface } from '@ethersproject/abi'
+import { Trans } from '@lingui/macro'
+import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { abi as VAULT_ABI } from 'abis/vaultAbi.json'
+import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
+import JSBI from 'jsbi'
+import { ReactNode, useMemo } from 'react'
+
+import { UNI } from '../../constants/tokens'
+import { useActiveWeb3React } from '../../hooks/web3'
+import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
+import { tryParseAmount } from '../swap/hooks'
+
+const VAULT_REWARDS_INTERFACE = new Interface(VAULT_ABI)
+
+const ARIA_ADDRESS = '0x7f8f8bb320629bbD9e815b8C2e0D1CF00d2a427A'
+
+const stakingRewards77 = [
+  '0xF025B284B20107Ac9f5003626ae1eEB3DAfa380A',
+  '0x5583A2fD7De10398EACBd37Bf3b6E7f4bDD3B20c',
+  '0xDA02b89563949C8a61eA0e827A5094f767611430',
+].map((d) => {
+  const bTOken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
+  return {
+    stakingRewardAddress: d,
+    baseToken: bTOken,
+    tokens: [bTOken],
+  }
+}) as any
+
+export const VAULT_REWARDS_INFO: {
+  [chainId: number]: {
+    stakingRewardAddress: string
+    baseToken: Token
+    tokens: [Token]
+  }[]
+} = {
+  [137]: [],
+  [77]: stakingRewards77,
+}
+
+export interface VaultInfo {
+  // Base Token
+  baseToken: Token
+  // the address of the reward contract
+  stakingRewardAddress: string
+  // the tokens involved in this pair
+  tokens: [Token]
+  // the amount of token currently staked, or undefined if no account
+  stakedAmount: CurrencyAmount<Token>
+  // the amount of reward token earned by the active account, or undefined if no account
+  earnedAmount: CurrencyAmount<Token>
+  // the total amount of token staked in the contract
+  totalStakedAmount: CurrencyAmount<Token>
+  // the amount of token distributed per second to all LPs, constant
+  totalRewardRate: CurrencyAmount<Token>
+  // the current amount of token distributed to the active account per second.
+  // equivalent to percent of total supply * reward rate
+  rewardRate: CurrencyAmount<Token>
+  // when the period ends
+  periodFinish: Date | undefined
+  // is vault finished
+  isFinished: boolean
+  // is vault finished
+  isStarted: boolean
+  // vault genesis
+  vaultLimit: CurrencyAmount<Token>
+  // vault limit
+  vaultGenesis: Date | undefined
+  // availableLimit
+  availableLimit: CurrencyAmount<Token>
+  // if pool is active
+  active: boolean
+  // calculates a hypothetical amount of token distributed to the active account per second.
+  getHypotheticalRewardRate: (
+    stakedAmount: CurrencyAmount<Token>,
+    totalStakedAmount: CurrencyAmount<Token>,
+    totalRewardRate: CurrencyAmount<Token>
+  ) => CurrencyAmount<Token>
+}
+
+const baseToken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
+
+// gets the staking info from the network for the active chain id
+export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
+  const { chainId, account } = useActiveWeb3React()
+
+  // detect if staking is ended
+  const currentBlockTimestamp = useCurrentBlockTimestamp()
+  const info = useMemo(
+    () =>
+      chainId
+        ? VAULT_REWARDS_INFO[chainId]?.filter((stakingRewardInfo) =>
+            stackingRewarAddress === undefined ? true : stackingRewarAddress === stakingRewardInfo.stakingRewardAddress
+          ) ?? []
+        : [],
+    [chainId, stackingRewarAddress]
+  )
+
+  const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
+
+  const accountArg = useMemo(() => [account ?? undefined], [account])
+
+  // get all the info from the staking rewards contracts
+  const balances = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'balanceOf',
+    accountArg,
+    NEVER_RELOAD
+  )
+
+  const earnedAmounts = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'earned',
+    accountArg,
+    NEVER_RELOAD
+  )
+  const totalSupplies = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'totalSupply',
+    undefined,
+    NEVER_RELOAD
+  )
+  // tokens per second, constants
+
+  const rewardRates = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'rewardRate',
+    undefined,
+    NEVER_RELOAD
+  )
+  const periodFinishes = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'periodFinish',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  const periodStarts = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'vaultGenesis',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  const vaultLimits = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'vaultLimit',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  const vaultGenesises = useMultipleContractSingleData(
+    rewardsAddresses,
+    VAULT_REWARDS_INTERFACE,
+    'vaultGenesis',
+    undefined,
+    NEVER_RELOAD
+  )
+
+  return useMemo(() => {
+    if (!chainId || !baseToken) return []
+
+    return rewardsAddresses.reduce<VaultInfo[]>((memo, rewardsAddress, index) => {
+      // these two are dependent on account
+      const balanceState = balances[index]
+      const earnedAmountState = earnedAmounts[index]
+
+      // these get fetched regardless of account
+      const totalSupplyState = totalSupplies[index]
+      const rewardRateState = rewardRates[index]
+      const periodFinishState = periodFinishes[index]
+      const periodStartState = periodStarts[index]
+
+      const vaultLimitState = vaultLimits[index]
+      const vaultGenesisState = vaultGenesises[index]
+
+      if (
+        // these may be undefined if not logged in
+        !balanceState?.loading &&
+        !earnedAmountState?.loading &&
+        // always need these
+        totalSupplyState &&
+        !totalSupplyState.loading &&
+        rewardRateState &&
+        !rewardRateState.loading &&
+        periodFinishState &&
+        !periodFinishState.loading
+      ) {
+        if (
+          balanceState?.error ||
+          earnedAmountState?.error ||
+          totalSupplyState.error ||
+          rewardRateState.error ||
+          periodFinishState.error
+        ) {
+          console.error('Failed to load staking rewards info')
+          return memo
+        }
+
+        // check for account, if no account set to 0
+        const stakedAmount = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
+        const totalStakedAmount = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(totalSupplyState.result?.[0]))
+        const totalRewardRate = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(rewardRateState.result?.[0]))
+        const vaultLimit = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(vaultLimitState.result?.[0]))
+
+        const getHypotheticalRewardRate = (
+          stakedAmount: CurrencyAmount<Token>,
+          totalStakedAmount: CurrencyAmount<Token>,
+          totalRewardRate: CurrencyAmount<Token>
+        ): CurrencyAmount<Token> => {
+          return CurrencyAmount.fromRawAmount(
+            baseToken,
+            JSBI.greaterThan(totalStakedAmount.quotient, JSBI.BigInt(0))
+              ? JSBI.divide(JSBI.multiply(totalRewardRate.quotient, stakedAmount.quotient), totalStakedAmount.quotient)
+              : JSBI.BigInt(0)
+          )
+        }
+
+        const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, totalRewardRate)
+
+        const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
+        const periodFinishMs = periodFinishSeconds * 1000
+
+        const periodStartSeconds = periodStartState.result?.[0]?.toNumber()
+
+        const isStarted =
+          periodStartSeconds && currentBlockTimestamp ? periodStartSeconds < currentBlockTimestamp.toNumber() : true
+        const isFinished =
+          periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds < currentBlockTimestamp.toNumber() : true
+
+        // compare period end timestamp vs current block timestamp (in seconds)
+        const active = isStarted && !isFinished
+
+        const vaultGenesisInMS = vaultGenesisState ? vaultGenesisState.result?.[0] * 1000 : 0
+        CurrencyAmount.fromRawAmount(baseToken, '0')
+
+        const availableLimit =
+          vaultLimit && totalStakedAmount
+            ? vaultLimit.subtract(totalStakedAmount)
+            : CurrencyAmount.fromRawAmount(baseToken, '0')
+
+        memo.push({
+          stakingRewardAddress: rewardsAddress,
+          tokens: info[index].tokens,
+          periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
+          earnedAmount: CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          rewardRate: individualRewardRate,
+          totalRewardRate,
+          stakedAmount,
+          totalStakedAmount,
+          getHypotheticalRewardRate,
+          active,
+          isStarted,
+          isFinished,
+          vaultLimit,
+          availableLimit,
+          vaultGenesis: vaultGenesisInMS > 0 ? new Date(vaultGenesisInMS) : undefined,
+          baseToken,
+        })
+      }
+      return memo
+    }, [])
+  }, [
+    balances,
+    chainId,
+    currentBlockTimestamp,
+    earnedAmounts,
+    info,
+    periodFinishes,
+    rewardRates,
+    rewardsAddresses,
+    totalSupplies,
+    baseToken,
+  ])
+}
+
+export function useTotalUniEarned(): CurrencyAmount<Token> | undefined {
+  const { chainId } = useActiveWeb3React()
+  const uni = chainId ? UNI[chainId] : undefined
+  const stakingInfos = useVaultInfo()
+
+  return useMemo(() => {
+    if (!uni) return undefined
+    return (
+      stakingInfos?.reduce(
+        (accumulator, stakingInfo) => accumulator.add(stakingInfo.earnedAmount),
+        CurrencyAmount.fromRawAmount(uni, '0')
+      ) ?? CurrencyAmount.fromRawAmount(uni, '0')
+    )
+  }, [stakingInfos, uni])
+}
+
+// based on typed value
+export function useDerivedStakeInfo(
+  typedValue: string,
+  stakingToken: Token | undefined,
+  userLiquidityUnstaked: CurrencyAmount<Token> | undefined
+): {
+  parsedAmount?: CurrencyAmount<Token>
+  error?: ReactNode
+} {
+  const { account } = useActiveWeb3React()
+
+  const parsedInput: CurrencyAmount<Token> | undefined = tryParseAmount(typedValue, stakingToken)
+
+  const parsedAmount =
+    parsedInput && userLiquidityUnstaked && JSBI.lessThanOrEqual(parsedInput.quotient, userLiquidityUnstaked.quotient)
+      ? parsedInput
+      : undefined
+
+  let error: ReactNode | undefined
+  if (!account) {
+    error = <Trans>Connect Wallet</Trans>
+  }
+  if (!parsedAmount) {
+    error = error ?? <Trans>Enter an amount</Trans>
+  }
+
+  return {
+    parsedAmount,
+    error,
+  }
+}

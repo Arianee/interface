@@ -136,37 +136,37 @@ export const ETH2X_FLI = new Token(
   'ETH2x-FLI',
   'ETH 2x Flexible Leverage Index'
 )
-export const sETH2 = new Token(
-  SupportedChainId.MAINNET,
-  '0xFe2e637202056d30016725477c5da089Ab0A043A',
-  18,
-  'sETH2',
-  'StakeWise Staked ETH2'
-)
-export const rETH2 = new Token(
-  SupportedChainId.MAINNET,
-  '0x20BC832ca081b91433ff6c17f85701B6e92486c5',
-  18,
-  'rETH2',
-  'StakeWise Reward ETH2'
-)
-export const SWISE = new Token(
-  SupportedChainId.MAINNET,
-  '0x48C3399719B582dD63eB5AADf12A40B4C3f52FA2',
-  18,
-  'SWISE',
-  'StakeWise'
-)
 export const UNI: { [chainId: number]: Token } = {
   [SupportedChainId.MAINNET]: new Token(SupportedChainId.MAINNET, UNI_ADDRESS[1], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.RINKEBY]: new Token(SupportedChainId.RINKEBY, UNI_ADDRESS[4], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.ROPSTEN]: new Token(SupportedChainId.ROPSTEN, UNI_ADDRESS[3], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.GOERLI]: new Token(SupportedChainId.GOERLI, UNI_ADDRESS[5], 18, 'UNI', 'Uniswap'),
   [SupportedChainId.KOVAN]: new Token(SupportedChainId.KOVAN, UNI_ADDRESS[42], 18, 'UNI', 'Uniswap'),
+  [SupportedChainId.POLYGON]: new Token(
+    SupportedChainId.POLYGON,
+    '0x9c78ee466d6cb57a4d01fd887d2b5dfb2d46288f',
+    18,
+    'MUST',
+    'MUST'
+  ),
+  [SupportedChainId.SOKOL]: new Token(
+    SupportedChainId.SOKOL,
+    '0x9e0e71D45f3344c54305c303831813F6C2B9CA5b',
+    18,
+    'WETH aria',
+    'WETH aria'
+  ),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {
   ...WETH9,
+  [SupportedChainId.SOKOL]: new Token(
+    SupportedChainId.SOKOL,
+    '0x9e0e71D45f3344c54305c303831813F6C2B9CA5b',
+    18,
+    'WETH aria',
+    'Wrapped Ether SOKOL/ARIA'
+  ),
   [SupportedChainId.OPTIMISM]: new Token(
     SupportedChainId.OPTIMISM,
     '0x4200000000000000000000000000000000000006',
@@ -194,6 +194,13 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     18,
     'WETH',
     'Wrapped Ether'
+  ),
+  [SupportedChainId.POLYGON]: new Token(
+    SupportedChainId.POLYGON,
+    '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+    18,
+    'WMATIC',
+    'Wrapped Matic'
   ),
 }
 
