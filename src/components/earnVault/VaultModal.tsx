@@ -167,22 +167,7 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
             id="stake-liquidity-token"
           />
 
-          <HypotheticalRewardRate dim={!hypotheticalRewardRate.greaterThan('0')}>
-            <div>
-              <ThemedText.Black fontWeight={600}>
-                <Trans>Weekly Rewards</Trans>
-              </ThemedText.Black>
-            </div>
 
-            <ThemedText.Black>
-              <Trans>
-                {hypotheticalRewardRate
-                  .multiply((60 * 60 * 24 * 7).toString())
-                  .toSignificant(4, { groupSeparator: ',' })}{' '}
-                UNI / week
-              </Trans>
-            </ThemedText.Black>
-          </HypotheticalRewardRate>
 
           <RowBetween>
             <ButtonConfirmed
@@ -208,7 +193,7 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.LargeHeader>
-              <Trans>Depositing Liquidity</Trans>
+              <Trans>Depositing {vaultInfo?.baseToken.name}</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
               <Trans>
