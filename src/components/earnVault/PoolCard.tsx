@@ -1,19 +1,19 @@
-import {Trans} from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 import styled from 'styled-components/macro'
 
-import {BIG_INT_SECONDS_IN_WEEK} from '../../constants/misc'
-import {useColor} from '../../hooks/useColor'
-import {useDifferenceInDays} from '../../hooks/useDifferenceInDays'
-import {useTotalSupply} from '../../hooks/useTotalSupply'
-import {useV2Pair} from '../../hooks/useV2Pairs'
-import {VaultInfo} from '../../state/vault/hooks'
-import {StyledInternalLink, ThemedText} from '../../theme'
-import {unwrappedToken} from '../../utils/unwrappedToken'
-import {ButtonPrimary} from '../Button'
-import {AutoColumn} from '../Column'
+import { BIG_INT_SECONDS_IN_WEEK } from '../../constants/misc'
+import { useColor } from '../../hooks/useColor'
+import { useDifferenceInDays } from '../../hooks/useDifferenceInDays'
+import { useTotalSupply } from '../../hooks/useTotalSupply'
+import { useV2Pair } from '../../hooks/useV2Pairs'
+import { VaultInfo } from '../../state/vault/hooks'
+import { StyledInternalLink, ThemedText } from '../../theme'
+import { unwrappedToken } from '../../utils/unwrappedToken'
+import { ButtonPrimary } from '../Button'
+import { AutoColumn } from '../Column'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import {RowBetween} from '../Row'
-import {Break, CardBGImage, CardNoise} from './styled'
+import { RowBetween } from '../Row'
+import { Break, CardBGImage, CardNoise } from './styled'
 
 const StatContainer = styled.div`
   display: flex;
@@ -153,11 +153,11 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
             {vaultInfo ? (
               vaultInfo.active ? (
                 <Trans>
-                  {vaultInfo.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(2, { groupSeparator: ',' })}{' '}
-                  Aria / week
+                  {vaultInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(2, { groupSeparator: ',' })}{' '}
+                  {vaultInfo?.baseToken?.name} / week
                 </Trans>
               ) : (
-                <Trans>0 Aria / week</Trans>
+                <Trans>0 {vaultInfo?.baseToken?.name} / week</Trans>
               )
             ) : (
               '-'
@@ -184,7 +184,7 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
                 vaultInfo.active ? (
                   <Trans>
                     {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toSignificant(4, { groupSeparator: ',' })}{' '}
-                    Aria / week
+                    {vaultInfo?.baseToken?.name} / week
                   </Trans>
                 ) : (
                   <Trans>0 Aria / week</Trans>
