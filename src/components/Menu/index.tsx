@@ -243,63 +243,36 @@ export default function Menu() {
               default:
                 return (
                   <MenuFlyout>
-                    <MenuItem href="https://uniswap.org/">
+                    <MenuItem href="https://www.aria.fyi">
                       <div>
                         <Trans>About</Trans>
                       </div>
                       <Info opacity={0.6} size={16} />
                     </MenuItem>
-                    <MenuItem href="https://help.uniswap.org/">
+                    <MenuItem href="https://www.arianee.org/">
                       <div>
-                        <Trans>Help Center</Trans>
+                        <Trans>Learn</Trans>
                       </div>
                       <HelpCircle opacity={0.6} size={16} />
                     </MenuItem>
-                    <MenuItem href="https://uniswap.canny.io/feature-requests">
+                    <MenuItem href="https://docs.arianee.org/docs/introduction">
                       <div>
-                        <Trans>Request Features</Trans>
-                      </div>
-                      <Coffee opacity={0.6} size={16} />
-                    </MenuItem>
-                    <MenuItem href="https://discord.gg/FCfyBSbCU5">
-                      <div>
-                        <Trans>Discord</Trans>
-                      </div>
-                      <MessageCircle opacity={0.6} size={16} />
-                    </MenuItem>
-                    <ToggleMenuItem onClick={() => setMenu('lang')}>
-                      <div>
-                        <Trans>Language</Trans>
-                      </div>
-                      <Globe opacity={0.6} size={16} />
-                    </ToggleMenuItem>
-                    <ToggleMenuItem onClick={() => toggleDarkMode()}>
-                      <div>{darkMode ? <Trans>Light Theme</Trans> : <Trans>Dark Theme</Trans>}</div>
-                      {darkMode ? <Moon opacity={0.6} size={16} /> : <Sun opacity={0.6} size={16} />}
-                    </ToggleMenuItem>
-                    <MenuItem href="https://docs.uniswap.org/">
-                      <div>
-                        <Trans>Docs</Trans>
+                        <Trans>Build</Trans>
                       </div>
                       <BookOpen opacity={0.6} size={16} />
                     </MenuItem>
-                    <ToggleMenuItem onClick={() => togglePrivacyPolicy()}>
+                    <MenuItem href="https://discord.gg/FCfyBSbCU5">
                       <div>
-                        <Trans>Legal & Privacy</Trans>
+                        <Trans>Engage (Discord)</Trans>
                       </div>
-                      <FileText opacity={0.6} size={16} />
-                    </ToggleMenuItem>
-                    {showUNIClaimOption && (
-                      <UNIbutton
-                        onClick={openClaimModal}
-                        padding="8px 16px"
-                        width="100%"
-                        $borderRadius="12px"
-                        mt="0.5rem"
-                      >
-                        <Trans>Claim UNI</Trans>
-                      </UNIbutton>
-                    )}
+                      <MessageCircle opacity={0.6} size={16} />
+                    </MenuItem>
+                    <MenuItem href="https://spkz.io/app/lounges/2/publicama">
+                      <div>
+                        <Trans>SPKZ</Trans>
+                      </div>
+                      <Coffee opacity={0.6} size={16} />
+                    </MenuItem>
                   </MenuFlyout>
                 )
             }

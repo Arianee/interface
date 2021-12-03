@@ -50,8 +50,6 @@ export const L2_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.OPTIMISM,
   SupportedChainId.OPTIMISTIC_KOVAN,
-  SupportedChainId.POLYGON,
-  SupportedChainId.SOKOL,
 ] as const
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number]
@@ -88,11 +86,12 @@ export const CHAIN_INFO: ChainInfo = {
     bridge: 'https://bridge.arbitrum.io/',
     defaultListUrl: POLYGON_LIST,
     docs: 'https://offchainlabs.com/',
-    explorer: 'https://arbiscan.io/',
+    explorer: 'https://blockscout.com/poa/sokol',
     infoLink: 'https://info.uniswap.org/#/arbitrum/',
     label: 'SOKOL',
-    logoUrl: arbitrumLogoUrl,
-    nativeCurrency: { name: 'SMATIC', symbol: 'smatic', decimals: 18 },
+    logoUrl:
+      'https://aws1.discourse-cdn.com/standard17/uploads/poa1/optimized/1X/ccc3189779405725744b241719aa535e9806370f_2_405x500.png',
+    nativeCurrency: { name: 'SPOA', symbol: 'SPOA', decimals: 18 },
     rpcUrls: [],
   },
   [SupportedChainId.POLYGON]: {
@@ -103,7 +102,7 @@ export const CHAIN_INFO: ChainInfo = {
     explorer: 'https://arbiscan.io/',
     infoLink: 'https://info.uniswap.org/#/arbitrum/',
     label: 'POLYGON',
-    logoUrl: arbitrumLogoUrl,
+    logoUrl: 'https://zapper.fi/images/networks/polygon-icon.png',
     nativeCurrency: { name: 'MATIC', symbol: 'matic', decimals: 18 },
     rpcUrls: ['https://speedy-nodes-nyc.moralis.io/337ce5317ffe1f66093a6c3b/polygon/mainnet'],
   },
