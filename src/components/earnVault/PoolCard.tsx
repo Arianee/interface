@@ -89,7 +89,7 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
       <TopSection>
         <DoubleCurrencyLogo currency0={currency0} size={24} />
         <ThemedText.White fontWeight={600} fontSize={24} style={{ marginLeft: '8px' }}>
-          {currency0.symbol}
+          {vaultInfo?.vaultName}
         </ThemedText.White>
 
         <StyledInternalLink to={`/staking/${vaultInfo?.stakingRewardAddress}`} style={{ width: '100%' }}>

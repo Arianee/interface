@@ -129,7 +129,7 @@ export default function Manage({
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
         <ThemedText.MediumHeader style={{ margin: 0 }}>
-          <Trans>{currencyA?.symbol} Liquidity Mining</Trans>
+          <Trans>{currencyA?.symbol} Staking</Trans>
         </ThemedText.MediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} size={24} />
       </RowBetween>
@@ -191,7 +191,7 @@ export default function Manage({
                 as={Link}
                 to={`/add/${currencyA && currencyId(currencyA)}`}
               >
-                <Trans>Add {currencyA?.symbol} liquidity</Trans>
+                <Trans>Add {currencyA?.symbol} tokens</Trans>
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>
@@ -230,7 +230,7 @@ export default function Manage({
               <AutoColumn gap="md">
                 <RowBetween>
                   <ThemedText.White fontWeight={600}>
-                    <Trans>Your liquidity deposits</Trans>
+                    <Trans>Your deposit</Trans>
                   </ThemedText.White>
                 </RowBetween>
                 <RowBetween style={{ alignItems: 'baseline' }}>

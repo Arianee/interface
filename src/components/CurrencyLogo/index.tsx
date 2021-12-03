@@ -8,7 +8,7 @@ import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import Logo from '../Logo'
 
-type Network = 'ethereum' | 'arbitrum' | 'optimism'
+type Network = 'ethereum' | 'arbitrum' | 'optimism' | 'polygon'
 
 function chainIdToNetworkName(networkId: SupportedChainId): Network {
   switch (networkId) {
@@ -18,6 +18,8 @@ function chainIdToNetworkName(networkId: SupportedChainId): Network {
       return 'arbitrum'
     case SupportedChainId.OPTIMISM:
       return 'optimism'
+    case SupportedChainId.POLYGON:
+      return 'polygon'      
     default:
       return 'ethereum'
   }
@@ -28,9 +30,12 @@ export const getTokenLogoURL = (
   chainId: SupportedChainId = SupportedChainId.MAINNET
 ): string | void => {
   const networkName = chainIdToNetworkName(chainId)
-  const networksWithUrls = [SupportedChainId.ARBITRUM_ONE, SupportedChainId.MAINNET, SupportedChainId.OPTIMISM]
+  const networksWithUrls = [SupportedChainId.ARBITRUM_ONE, SupportedChainId.MAINNET, SupportedChainId.OPTIMISM, SupportedChainId.POLYGON]
   if (networksWithUrls.includes(chainId)) {
-    return `https://raw.githubusercontent.com/Uniswap/assets/master/blockchains/${networkName}/assets/${address}/logo.png`
+    
+    return `https://storage.googleapis.com/zapper-fi-assets/tokens/${networkName}/${address}.png`
+  } else {
+    return `https://storage.googleapis.com/zapper-fi-assets/tokens/polygon/0x46f48fbdedaa6f5500993bede9539ef85f4bee8e.png`
   }
 }
 

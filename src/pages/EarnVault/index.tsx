@@ -95,7 +95,6 @@ export default function EarnVault() {
           <ThemedText.MediumHeader style={{ marginTop: '0.5rem' }}>
             <Trans>Participating pools</Trans>
           </ThemedText.MediumHeader>
-          <Countdown exactEnd={stakingInfos?.[0]?.periodFinish} />
         </DataRow>
 
         <PoolSection>

@@ -25,6 +25,7 @@ const stakingRewards77 = [
     stakingRewardAddress: d,
     baseToken: bTOken,
     tokens: [bTOken],
+    vaultName: 'ARIA 6-month vault',
   }
 }) as any
 
@@ -33,6 +34,8 @@ export const VAULT_REWARDS_INFO: {
     stakingRewardAddress: string
     baseToken: Token
     tokens: [Token]
+    vaultName: 'ARIA 6-month vault',
+
   }[]
 } = {
   [137]: [],
@@ -40,6 +43,8 @@ export const VAULT_REWARDS_INFO: {
 }
 
 export interface VaultInfo {
+  // Vault name
+  vaultName: string
   // Base Token
   baseToken: Token
   // the address of the reward contract
@@ -248,6 +253,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
             : CurrencyAmount.fromRawAmount(baseToken, '0')
 
         memo.push({
+          vaultName: info[index].vaultName,
           stakingRewardAddress: rewardsAddress,
           tokens: info[index].tokens,
           periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
