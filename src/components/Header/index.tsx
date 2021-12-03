@@ -277,8 +277,21 @@ export default function Header() {
         <StyledNavLink id={`aria-staking-link`} to={'/staking'}>
           <Trans>Aria Staking</Trans>
         </StyledNavLink>
+        <StyledExternalLink id={`tokenomics-nav-link`} target={'_self'} href={'https://aria.fyi/about.html'}>
+          <Trans>Tokenomics</Trans>
+        </StyledExternalLink>
+        <StyledExternalLink id={`faq-nav-link`} target={'_self'} href={'https://aria.fyi/faq.html'}>
+          <Trans>FAQ</Trans>
+        </StyledExternalLink>
+        <StyledExternalLink
+          id={`get-aria-nav-link`}
+          target={'_self'}
+          href={'https://app.uniswap.org/#/swap?outputCurrency=0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9&use=V2'}
+        >
+          <Trans>Get Aria</Trans>
+          <sup>↗</sup>
+        </StyledExternalLink>
       </HeaderLinks>
-
       <HeaderControls>
         <HeaderElement>
           <NetworkSelector />
