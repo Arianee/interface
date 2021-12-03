@@ -75,7 +75,7 @@ const StyledTitleText = styled.div<{ active: boolean }>`
   color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
 `
 
-const StyledListUrlText = styled(ThemedText.Main)<{ active: boolean }>`
+const StyledListUrlText = styled(ThemedText.main)<{ active: boolean }>`
   font-size: 12px;
   color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
 `
@@ -361,9 +361,9 @@ export function ManageLists({
           />
         </Row>
         {addError ? (
-          <ThemedText.Error title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
+          <ThemedText.error title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} error>
             {addError}
-          </ThemedText.Error>
+          </ThemedText.error>
         ) : null}
       </PaddedColumn>
       {tempList && (
@@ -373,10 +373,10 @@ export function ManageLists({
               <RowFixed>
                 {tempList.logoURI && <ListLogo logoURI={tempList.logoURI} size="40px" />}
                 <AutoColumn gap="4px" style={{ marginLeft: '20px' }}>
-                  <ThemedText.Body fontWeight={600}>{tempList.name}</ThemedText.Body>
-                  <ThemedText.Main fontSize={'12px'}>
+                  <ThemedText.body fontWeight={600}>{tempList.name}</ThemedText.body>
+                  <ThemedText.main fontSize={'12px'}>
                     <Trans>{tempList.tokens.length} tokens</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </AutoColumn>
               </RowFixed>
               {isImported ? (
@@ -384,9 +384,9 @@ export function ManageLists({
                   <IconWrapper stroke={theme.text2} size="16px" marginRight={'10px'}>
                     <CheckCircle />
                   </IconWrapper>
-                  <ThemedText.Body color={theme.text2}>
+                  <ThemedText.body color={theme.text2}>
                     <Trans>Loaded</Trans>
-                  </ThemedText.Body>
+                  </ThemedText.body>
                 </RowFixed>
               ) : (
                 <ButtonPrimary

@@ -224,9 +224,9 @@ export function CurrencySearch({
         </div>
       ) : (
         <Column style={{ padding: '20px', height: '100%' }}>
-          <ThemedText.Main color={theme.text3} textAlign="center" mb="20px">
+          <ThemedText.main color={theme.text3} textAlign="center" mb="20px">
             <Trans>No results found.</Trans>
-          </ThemedText.Main>
+          </ThemedText.main>
         </Column>
       )}
       <Footer>
@@ -236,9 +236,9 @@ export function CurrencySearch({
               <IconWrapper size="16px" marginRight="6px" stroke={theme.primaryText1}>
                 <Edit />
               </IconWrapper>
-              <ThemedText.Main color={theme.primaryText1}>
+              <ThemedText.main color={theme.primaryText1}>
                 <Trans>Manage Token Lists</Trans>
-              </ThemedText.Main>
+              </ThemedText.main>
             </RowFixed>
           </ButtonText>
         </Row>

@@ -136,7 +136,7 @@ export function AddRemoveTabs({
         >
           <StyledArrowLeft stroke={theme.text2} />
         </StyledHistoryLink>
-        <ThemedText.MediumHeader
+        <ThemedText.mediumHeader
           fontWeight={500}
           fontSize={20}
           style={{ flex: '1', margin: 'auto', textAlign: children ? 'start' : 'center' }}
@@ -148,7 +148,7 @@ export function AddRemoveTabs({
           ) : (
             <Trans>Remove Liquidity</Trans>
           )}
-        </ThemedText.MediumHeader>
+        </ThemedText.mediumHeader>
         <Box style={{ marginRight: '.5rem' }}>{children}</Box>
         <SettingsTab placeholderSlippage={defaultSlippage} />
       </RowBetween>

@@ -135,13 +135,13 @@ function CurrencyRow({
         <Text title={currency.name} fontWeight={500}>
           {currency.symbol}
         </Text>
-        <ThemedText.DarkGray ml="0px" fontSize={'12px'} fontWeight={300}>
+        <ThemedText.darkGray ml="0px" fontSize={'12px'} fontWeight={300}>
           {!currency.isNative && !isOnSelectedList && customAdded ? (
             <Trans>{currency.name} • Added by user</Trans>
           ) : (
             currency.name
           )}
-        </ThemedText.DarkGray>
+        </ThemedText.darkGray>
       </Column>
       <TokenTags currency={currency} />
       {showCurrencyAmount && (
@@ -167,9 +167,9 @@ function BreakLineComponent({ style }: { style: CSSProperties }) {
         <RowBetween>
           <RowFixed>
             <TokenListLogoWrapper src={TokenListLogo} />
-            <ThemedText.Main ml="6px" fontSize="12px" color={theme.text1}>
+            <ThemedText.main ml="6px" fontSize="12px" color={theme.text1}>
               <Trans>Expanded results from inactive Token Lists</Trans>
-            </ThemedText.Main>
+            </ThemedText.main>
           </RowFixed>
           <QuestionHelper
             text={

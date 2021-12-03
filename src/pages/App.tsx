@@ -19,6 +19,8 @@ import { RedirectDuplicateTokenIds } from './AddLiquidity/redirects'
 import { RedirectDuplicateTokenIdsV2 } from './AddLiquidityV2/redirects'
 import Earn from './Earn'
 import Manage from './Earn/Manage'
+import VaultEarn from './EarnVault'
+import VaultManage from './EarnVault/Manage'
 import MigrateV2 from './MigrateV2'
 import MigrateV2Pair from './MigrateV2/MigrateV2Pair'
 import Pool from './Pool'
@@ -94,6 +96,10 @@ export default function App() {
                 </Route>
                 <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
                 <Route exact strict path="/uni" component={Earn} />
+
+                <Route exact strict path="/staking" component={VaultEarn} />
+                <Route exact strict path="/staking/:rewardAddress" component={VaultManage} />
+
                 <Route exact strict path="/uni/:currencyIdA/:currencyIdB" component={Manage} />
 
                 <Route exact strict path="/send" component={RedirectPathToSwapOnly} />

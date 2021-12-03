@@ -26,47 +26,47 @@ export function ConfirmAddModalBottom({
   return (
     <>
       <RowBetween>
-        <ThemedText.Body>
+        <ThemedText.body>
           <Trans>{currencies[Field.CURRENCY_A]?.symbol} Deposited</Trans>
-        </ThemedText.Body>
+        </ThemedText.body>
         <RowFixed>
           <CurrencyLogo currency={currencies[Field.CURRENCY_A]} style={{ marginRight: '8px' }} />
-          <ThemedText.Body>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</ThemedText.Body>
+          <ThemedText.body>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</ThemedText.body>
         </RowFixed>
       </RowBetween>
       <RowBetween>
-        <ThemedText.Body>
+        <ThemedText.body>
           <Trans>{currencies[Field.CURRENCY_B]?.symbol} Deposited</Trans>
-        </ThemedText.Body>
+        </ThemedText.body>
         <RowFixed>
           <CurrencyLogo currency={currencies[Field.CURRENCY_B]} style={{ marginRight: '8px' }} />
-          <ThemedText.Body>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</ThemedText.Body>
+          <ThemedText.body>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</ThemedText.body>
         </RowFixed>
       </RowBetween>
       <RowBetween>
-        <ThemedText.Body>
+        <ThemedText.body>
           <Trans>Rates</Trans>
-        </ThemedText.Body>
-        <ThemedText.Body>
+        </ThemedText.body>
+        <ThemedText.body>
           {`1 ${currencies[Field.CURRENCY_A]?.symbol} = ${price?.toSignificant(4)} ${
             currencies[Field.CURRENCY_B]?.symbol
           }`}
-        </ThemedText.Body>
+        </ThemedText.body>
       </RowBetween>
       <RowBetween style={{ justifyContent: 'flex-end' }}>
-        <ThemedText.Body>
+        <ThemedText.body>
           {`1 ${currencies[Field.CURRENCY_B]?.symbol} = ${price?.invert().toSignificant(4)} ${
             currencies[Field.CURRENCY_A]?.symbol
           }`}
-        </ThemedText.Body>
+        </ThemedText.body>
       </RowBetween>
       <RowBetween>
-        <ThemedText.Body>
+        <ThemedText.body>
           <Trans>Share of Pool:</Trans>
-        </ThemedText.Body>
-        <ThemedText.Body>
+        </ThemedText.body>
+        <ThemedText.body>
           <Trans>{noLiquidity ? '100' : poolTokenPercentage?.toSignificant(4)}%</Trans>
-        </ThemedText.Body>
+        </ThemedText.body>
       </RowBetween>
       <ButtonPrimary style={{ margin: '20px 0 0 0' }} onClick={onAdd}>
         <Text fontWeight={500} fontSize={20}>

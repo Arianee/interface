@@ -46,9 +46,9 @@ export default memo(function SwapRoute({
           </LoadingRows>
         ) : (
           <Badge>
-            <ThemedText.Black fontSize={12}>
+            <ThemedText.black fontSize={12}>
               {getTradeVersion(trade) === Version.v2 ? <Trans>V2</Trans> : <Trans>V3</Trans>}
-            </ThemedText.Black>
+            </ThemedText.black>
           </Badge>
         )}
       </RowBetween>
@@ -65,9 +65,9 @@ export default memo(function SwapRoute({
         />
       )}
       {routingAPIEnabled && (
-        <ThemedText.Main fontSize={12} width={400}>
+        <ThemedText.main fontSize={12} width={400}>
           <Trans>This route optimizes your price by considering split routes, multiple hops, and gas costs.</Trans>
-        </ThemedText.Main>
+        </ThemedText.main>
       )}
     </AutoColumn>
   )

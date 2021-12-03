@@ -199,9 +199,9 @@ export default function Pool() {
         <AutoColumn gap="lg" justify="center">
           <AutoColumn gap="lg" style={{ width: '100%' }}>
             <TitleRow style={{ marginTop: '1rem' }} padding={'0'}>
-              <ThemedText.Body fontSize={'20px'}>
+              <ThemedText.body fontSize={'20px'}>
                 <Trans>Pools Overview</Trans>
-              </ThemedText.Body>
+              </ThemedText.body>
               <ButtonRow>
                 {showV2Features && (
                   <Menu
@@ -209,10 +209,10 @@ export default function Pool() {
                     flyoutAlignment={FlyoutAlignment.LEFT}
                     ToggleUI={(props: any) => (
                       <MoreOptionsButton {...props}>
-                        <ThemedText.Body style={{ alignItems: 'center', display: 'flex' }}>
+                        <ThemedText.body style={{ alignItems: 'center', display: 'flex' }}>
                           <Trans>More</Trans>
                           <ChevronDown size={15} />
-                        </ThemedText.Body>
+                        </ThemedText.body>
                       </MoreOptionsButton>
                     )}
                   />
@@ -249,12 +249,12 @@ export default function Pool() {
                 <PositionList positions={filteredPositions} />
               ) : (
                 <NoLiquidity>
-                  <ThemedText.Body color={theme.text3} textAlign="center">
+                  <ThemedText.body color={theme.text3} textAlign="center">
                     <Inbox size={48} strokeWidth={1} style={{ marginBottom: '.5rem' }} />
                     <div>
                       <Trans>Your V3 liquidity positions will appear here.</Trans>
                     </div>
-                  </ThemedText.Body>
+                  </ThemedText.body>
                   {showConnectAWallet && (
                     <ButtonPrimary style={{ marginTop: '2em', padding: '8px 16px' }} onClick={toggleWalletModal}>
                       <Trans>Connect a wallet</Trans>
@@ -306,9 +306,9 @@ export default function Pool() {
               {closedPositions.length > 0 ? (
                 <ShowInactiveToggle>
                   <label>
-                    <ThemedText.Body onClick={() => setUserHideClosedPositions(!userHideClosedPositions)}>
+                    <ThemedText.body onClick={() => setUserHideClosedPositions(!userHideClosedPositions)}>
                       <Trans>Show closed positions</Trans>
-                    </ThemedText.Body>
+                    </ThemedText.body>
                   </label>
                   <input
                     type="checkbox"

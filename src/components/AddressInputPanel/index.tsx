@@ -1,6 +1,5 @@
-import { Trans } from '@lingui/macro'
 // eslint-disable-next-line no-restricted-imports
-import { t } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { ReactNode, useCallback, useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components/macro'
 
@@ -108,9 +107,9 @@ export default function AddressInputPanel({
         <InputContainer>
           <AutoColumn gap="md">
             <RowBetween>
-              <ThemedText.Black color={theme.text2} fontWeight={500} fontSize={14}>
+              <ThemedText.black color={theme.text2} fontWeight={500} fontSize={14}>
                 {label ?? <Trans>Recipient</Trans>}
-              </ThemedText.Black>
+              </ThemedText.black>
               {address && chainId && (
                 <ExternalLink
                   href={getExplorerLink(chainId, name ?? address, ExplorerDataType.ADDRESS)}

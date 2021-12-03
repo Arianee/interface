@@ -95,25 +95,25 @@ export default function DelegateModal({ isOpen, onDismiss, title }: VoteModalPro
         <ContentWrapper gap="lg">
           <AutoColumn gap="lg" justify="center">
             <RowBetween>
-              <ThemedText.MediumHeader fontWeight={500}>{title}</ThemedText.MediumHeader>
+              <ThemedText.mediumHeader fontWeight={500}>{title}</ThemedText.mediumHeader>
               <StyledClosed stroke="black" onClick={wrappedOndismiss} />
             </RowBetween>
-            <ThemedText.Body>
+            <ThemedText.body>
               <Trans>Earned UNI tokens represent voting shares in Uniswap governance.</Trans>
-            </ThemedText.Body>
-            <ThemedText.Body>
+            </ThemedText.body>
+            <ThemedText.body>
               <Trans>You can either vote on each proposal yourself or delegate your votes to a third party.</Trans>
-            </ThemedText.Body>
+            </ThemedText.body>
             {usingDelegate && <AddressInputPanel value={typed} onChange={handleRecipientType} />}
             <ButtonPrimary disabled={!isAddress(parsedAddress ?? '')} onClick={onDelegate}>
-              <ThemedText.MediumHeader color="white">
+              <ThemedText.mediumHeader color="white">
                 {usingDelegate ? <Trans>Delegate Votes</Trans> : <Trans>Self Delegate</Trans>}
-              </ThemedText.MediumHeader>
+              </ThemedText.mediumHeader>
             </ButtonPrimary>
             <TextButton onClick={() => setUsingDelegate(!usingDelegate)}>
-              <ThemedText.Blue>
+              <ThemedText.blue>
                 {usingDelegate ? <Trans>Remove Delegate</Trans> : <Trans>Add Delegate +</Trans>}
-              </ThemedText.Blue>
+              </ThemedText.blue>
             </TextButton>
           </AutoColumn>
         </ContentWrapper>
@@ -121,20 +121,20 @@ export default function DelegateModal({ isOpen, onDismiss, title }: VoteModalPro
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOndismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <ThemedText.LargeHeader>
+            <ThemedText.largeHeader>
               {usingDelegate ? <Trans>Delegating votes</Trans> : <Trans>Unlocking Votes</Trans>}
-            </ThemedText.LargeHeader>
-            <ThemedText.Main fontSize={36}> {formatCurrencyAmount(uniBalance, 4)}</ThemedText.Main>
+            </ThemedText.largeHeader>
+            <ThemedText.main fontSize={36}> {formatCurrencyAmount(uniBalance, 4)}</ThemedText.main>
           </AutoColumn>
         </LoadingView>
       )}
       {hash && (
         <SubmittedView onDismiss={wrappedOndismiss} hash={hash}>
           <AutoColumn gap="12px" justify={'center'}>
-            <ThemedText.LargeHeader>
+            <ThemedText.largeHeader>
               <Trans>Transaction Submitted</Trans>
-            </ThemedText.LargeHeader>
-            <ThemedText.Main fontSize={36}>{formatCurrencyAmount(uniBalance, 4)}</ThemedText.Main>
+            </ThemedText.largeHeader>
+            <ThemedText.main fontSize={36}>{formatCurrencyAmount(uniBalance, 4)}</ThemedText.main>
           </AutoColumn>
         </SubmittedView>
       )}

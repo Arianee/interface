@@ -203,9 +203,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
             {chainId === SupportedChainId.MAINNET && (
               <RowBetween>
                 <RowFixed>
-                  <ThemedText.Black fontWeight={400} fontSize={14} color={theme.text2}>
+                  <ThemedText.black fontWeight={400} fontSize={14} color={theme.text2}>
                     <Trans>Auto Router</Trans>
-                  </ThemedText.Black>
+                  </ThemedText.black>
                   <QuestionHelper
                     text={<Trans>Use the Uniswap Labs API to get better pricing through a more efficient route.</Trans>}
                   />
@@ -226,9 +226,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
 
             <RowBetween>
               <RowFixed>
-                <ThemedText.Black fontWeight={400} fontSize={14} color={theme.text2}>
+                <ThemedText.black fontWeight={400} fontSize={14} color={theme.text2}>
                   <Trans>Expert Mode</Trans>
-                </ThemedText.Black>
+                </ThemedText.black>
                 <QuestionHelper
                   text={
                     <Trans>Allow high price impact trades and skip the confirm screen. Use at your own risk.</Trans>

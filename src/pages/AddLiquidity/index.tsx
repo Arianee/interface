@@ -406,9 +406,9 @@ export default function AddLiquidity({
   const Buttons = () =>
     addIsUnsupported ? (
       <ButtonPrimary disabled={true} $borderRadius="12px" padding={'12px'}>
-        <ThemedText.Main mb="4px">
+        <ThemedText.main mb="4px">
           <Trans>Unsupported Asset</Trans>
-        </ThemedText.Main>
+        </ThemedText.main>
       </ButtonPrimary>
     ) : !account ? (
       <ButtonLight onClick={toggleWalletModal} $borderRadius="12px" padding={'12px'}>
@@ -517,9 +517,9 @@ export default function AddLiquidity({
               <Row justifyContent="flex-end" style={{ width: 'fit-content', minWidth: 'fit-content' }}>
                 <MediumOnly>
                   <ButtonText onClick={clearAll} margin="0 15px 0 0">
-                    <ThemedText.Blue fontSize="12px">
+                    <ThemedText.blue fontSize="12px">
                       <Trans>Clear All</Trans>
-                    </ThemedText.Blue>
+                    </ThemedText.blue>
                   </ButtonText>
                 </MediumOnly>
                 {baseCurrency && quoteCurrency ? (
@@ -548,9 +548,9 @@ export default function AddLiquidity({
                   <>
                     <AutoColumn gap="md">
                       <RowBetween paddingBottom="20px">
-                        <ThemedText.Label>
+                        <ThemedText.label>
                           <Trans>Select Pair</Trans>
-                        </ThemedText.Label>
+                        </ThemedText.label>
                       </RowBetween>
                       <RowBetween>
                         <CurrencyDropdown
@@ -608,9 +608,9 @@ export default function AddLiquidity({
                   disabled={tickLower === undefined || tickUpper === undefined || invalidPool || invalidRange}
                 >
                   <AutoColumn gap="md">
-                    <ThemedText.Label>
+                    <ThemedText.label>
                       {hasExistingPosition ? <Trans>Add more liquidity</Trans> : <Trans>Deposit Amounts</Trans>}
-                    </ThemedText.Label>
+                    </ThemedText.label>
 
                     <CurrencyInputPanel
                       value={formattedAmounts[Field.CURRENCY_A]}
@@ -653,26 +653,26 @@ export default function AddLiquidity({
                       {!noLiquidity ? (
                         <>
                           <RowBetween>
-                            <ThemedText.Label>
+                            <ThemedText.label>
                               <Trans>Set Price Range</Trans>
-                            </ThemedText.Label>
+                            </ThemedText.label>
                           </RowBetween>
 
                           {price && baseCurrency && quoteCurrency && !noLiquidity && (
                             <AutoRow gap="4px" justify="center" style={{ marginTop: '0.5rem' }}>
                               <Trans>
-                                <ThemedText.Main fontWeight={500} textAlign="center" fontSize={12} color="text1">
+                                <ThemedText.main fontWeight={500} textAlign="center" fontSize={12} color="text1">
                                   Current Price:
-                                </ThemedText.Main>
-                                <ThemedText.Body fontWeight={500} textAlign="center" fontSize={12} color="text1">
+                                </ThemedText.main>
+                                <ThemedText.body fontWeight={500} textAlign="center" fontSize={12} color="text1">
                                   <HoverInlineText
                                     maxCharacters={20}
                                     text={invertPrice ? price.invert().toSignificant(6) : price.toSignificant(6)}
                                   />
-                                </ThemedText.Body>
-                                <ThemedText.Body color="text2" fontSize={12}>
+                                </ThemedText.body>
+                                <ThemedText.body color="text2" fontSize={12}>
                                   {quoteCurrency?.symbol} per {baseCurrency.symbol}
-                                </ThemedText.Body>
+                                </ThemedText.body>
                               </Trans>
                             </AutoRow>
                           )}
@@ -695,9 +695,9 @@ export default function AddLiquidity({
                       ) : (
                         <AutoColumn gap="md">
                           <RowBetween>
-                            <ThemedText.Label>
+                            <ThemedText.label>
                               <Trans>Set Starting Price</Trans>
-                            </ThemedText.Label>
+                            </ThemedText.label>
                           </RowBetween>
                           {noLiquidity && (
                             <BlueCard
@@ -708,7 +708,7 @@ export default function AddLiquidity({
                                 padding: '1rem 1rem',
                               }}
                             >
-                              <ThemedText.Body
+                              <ThemedText.body
                                 fontSize={14}
                                 style={{ fontWeight: 500 }}
                                 textAlign="left"
@@ -719,7 +719,7 @@ export default function AddLiquidity({
                                   starting price for the pool. Then, enter your liquidity price range and deposit
                                   amount. Gas fees will be higher than usual due to the initialization transaction.
                                 </Trans>
-                              </ThemedText.Body>
+                              </ThemedText.body>
                             </BlueCard>
                           )}
                           <OutlineCard padding="12px">
@@ -730,12 +730,12 @@ export default function AddLiquidity({
                             />
                           </OutlineCard>
                           <RowBetween style={{ backgroundColor: theme.bg1, padding: '12px', borderRadius: '12px' }}>
-                            <ThemedText.Main>
+                            <ThemedText.main>
                               <Trans>Current {baseCurrency?.symbol} Price:</Trans>
-                            </ThemedText.Main>
-                            <ThemedText.Main>
+                            </ThemedText.main>
+                            <ThemedText.main>
                               {price ? (
-                                <ThemedText.Main>
+                                <ThemedText.main>
                                   <RowFixed>
                                     <HoverInlineText
                                       maxCharacters={20}
@@ -743,11 +743,11 @@ export default function AddLiquidity({
                                     />{' '}
                                     <span style={{ marginLeft: '4px' }}>{quoteCurrency?.symbol}</span>
                                   </RowFixed>
-                                </ThemedText.Main>
+                                </ThemedText.main>
                               ) : (
                                 '-'
                               )}
-                            </ThemedText.Main>
+                            </ThemedText.main>
                           </RowBetween>
                         </AutoColumn>
                       )}
@@ -762,9 +762,9 @@ export default function AddLiquidity({
                           <AutoColumn gap="md">
                             {noLiquidity && (
                               <RowBetween>
-                                <ThemedText.Label>
+                                <ThemedText.label>
                                   <Trans>Set Price Range</Trans>
-                                </ThemedText.Label>
+                                </ThemedText.label>
                               </RowBetween>
                             )}
                             <RangeSelector
@@ -805,12 +805,12 @@ export default function AddLiquidity({
                               <AutoColumn gap="8px" style={{ height: '100%' }}>
                                 <RowFixed>
                                   <AlertTriangle stroke={theme.yellow3} size="16px" />
-                                  <ThemedText.Yellow ml="12px" fontSize="15px">
+                                  <ThemedText.yellow ml="12px" fontSize="15px">
                                     <Trans>Efficiency Comparison</Trans>
-                                  </ThemedText.Yellow>
+                                  </ThemedText.yellow>
                                 </RowFixed>
                                 <RowFixed>
-                                  <ThemedText.Yellow ml="12px" fontSize="13px" margin={0} fontWeight={400}>
+                                  <ThemedText.yellow ml="12px" fontSize="13px" margin={0} fontWeight={400}>
                                     <Trans>
                                       Full range positions may earn less fees than concentrated positions. Learn more{' '}
                                       <ExternalLink
@@ -823,7 +823,7 @@ export default function AddLiquidity({
                                       </ExternalLink>
                                       .
                                     </Trans>
-                                  </ThemedText.Yellow>
+                                  </ThemedText.yellow>
                                 </RowFixed>
                                 <Row>
                                   <ButtonYellow
@@ -836,9 +836,9 @@ export default function AddLiquidity({
                                       getSetFullRange()
                                     }}
                                   >
-                                    <ThemedText.Black fontSize={13} color="black">
+                                    <ThemedText.black fontSize={13} color="black">
                                       <Trans>I understand</Trans>
-                                    </ThemedText.Black>
+                                    </ThemedText.black>
                                   </ButtonYellow>
                                 </Row>
                               </AutoColumn>
@@ -851,12 +851,12 @@ export default function AddLiquidity({
                         <YellowCard padding="8px 12px" $borderRadius="12px">
                           <RowBetween>
                             <AlertTriangle stroke={theme.yellow3} size="16px" />
-                            <ThemedText.Yellow ml="12px" fontSize="12px">
+                            <ThemedText.yellow ml="12px" fontSize="12px">
                               <Trans>
                                 Your position will not earn fees or be used in trades until the market price moves into
                                 your range.
                               </Trans>
-                            </ThemedText.Yellow>
+                            </ThemedText.yellow>
                           </RowBetween>
                         </YellowCard>
                       ) : null}
@@ -865,9 +865,9 @@ export default function AddLiquidity({
                         <YellowCard padding="8px 12px" $borderRadius="12px">
                           <RowBetween>
                             <AlertTriangle stroke={theme.yellow3} size="16px" />
-                            <ThemedText.Yellow ml="12px" fontSize="12px">
+                            <ThemedText.yellow ml="12px" fontSize="12px">
                               <Trans>Invalid range selected. The min price must be lower than the max price.</Trans>
-                            </ThemedText.Yellow>
+                            </ThemedText.yellow>
                           </RowBetween>
                         </YellowCard>
                       ) : null}

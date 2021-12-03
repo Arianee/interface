@@ -284,6 +284,7 @@ export function useSingleContractWithCallData(
   const results = useCallsData(calls, blocksPerFetch ? { blocksPerFetch } : undefined)
 
   const latestBlockNumber = useBlockNumber()
+  console.log('latestBlockNumber', latestBlockNumber)
 
   return useMemo(() => {
     return results.map((result, i) =>

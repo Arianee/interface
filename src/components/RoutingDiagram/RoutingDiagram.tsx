@@ -93,9 +93,9 @@ function Route({ percent, path }: { percent: RoutingDiagramEntry['percent']; pat
         <DotColor />
       </DottedLine>
       <OpaqueBadge>
-        <ThemedText.Small fontSize={12} style={{ wordBreak: 'normal' }}>
+        <ThemedText.small fontSize={12} style={{ wordBreak: 'normal' }}>
           {percent.toSignificant(2)}%
-        </ThemedText.Small>
+        </ThemedText.small>
       </OpaqueBadge>
 
       <AutoRow gap="1px" width="100%" style={{ justifyContent: 'space-evenly', zIndex: 2 }}>
@@ -116,7 +116,7 @@ function Pool({ currency0, currency1, feeAmount }: { currency0: Currency; curren
       <Box margin="0 5px 0 10px">
         <DoubleCurrencyLogo currency0={tokenInfo1} currency1={tokenInfo0} size={20} />
       </Box>
-      <ThemedText.Small fontSize={12}>{feeAmount / 10000}%</ThemedText.Small>
+      <ThemedText.small fontSize={12}>{feeAmount / 10000}%</ThemedText.small>
     </PoolBadge>
   )
 }

@@ -344,9 +344,9 @@ export default function WalletModal({
               <ArrowLeft />
             </HoverText>
             <Row justify="center">
-              <ThemedText.MediumHeader>
+              <ThemedText.mediumHeader>
                 <Trans>Legal & Privacy</Trans>
-              </ThemedText.MediumHeader>
+              </ThemedText.mediumHeader>
             </Row>
           </HeaderRow>
           <PrivacyPolicy />
@@ -392,23 +392,23 @@ export default function WalletModal({
           <AutoColumn gap="16px">
             <LightCard>
               <AutoRow style={{ flexWrap: 'nowrap' }}>
-                <ThemedText.Black fontSize={14}>
+                <ThemedText.black fontSize={14}>
                   <Trans>
                     By connecting a wallet, you agree to Uniswap Labs’{' '}
                     <ExternalLink href="https://uniswap.org/terms-of-service/">Terms of Service</ExternalLink> and
                     acknowledge that you have read and understand the Uniswap{' '}
                     <ExternalLink href="https://uniswap.org/disclaimer/">Protocol Disclaimer</ExternalLink>.
                   </Trans>
-                </ThemedText.Black>
+                </ThemedText.black>
               </AutoRow>
             </LightCard>
             <LinkCard padding=".5rem" $borderRadius=".75rem" onClick={() => setWalletView(WALLET_VIEWS.LEGAL)}>
               <RowBetween>
                 <AutoRow gap="4px">
                   <Info size={20} />
-                  <ThemedText.White fontSize={14}>
+                  <ThemedText.white fontSize={14}>
                     <Trans>How this app uses APIs</Trans>
-                  </ThemedText.White>
+                  </ThemedText.white>
                 </AutoRow>
                 <ArrowRight size={16} />
               </RowBetween>

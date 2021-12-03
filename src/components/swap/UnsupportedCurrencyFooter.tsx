@@ -37,7 +37,7 @@ const StyledButtonEmpty = styled(ButtonEmpty)`
   text-decoration: none;
 `
 
-const AddressText = styled(ThemedText.Blue)`
+const AddressText = styled(ThemedText.blue)`
   font-size: 12px;
 
   ${({ theme }) => theme.mediaWidth.upToSmall`
@@ -70,9 +70,9 @@ export default function UnsupportedCurrencyFooter({
         <Card padding="2rem">
           <AutoColumn gap="lg">
             <RowBetween>
-              <ThemedText.MediumHeader>
+              <ThemedText.mediumHeader>
                 <Trans>Unsupported Assets</Trans>
-              </ThemedText.MediumHeader>
+              </ThemedText.mediumHeader>
               <CloseIcon onClick={() => setShowDetails(false)} />
             </RowBetween>
             {tokens.map((token) => {
@@ -84,7 +84,7 @@ export default function UnsupportedCurrencyFooter({
                     <AutoColumn gap="10px">
                       <AutoRow gap="5px" align="center">
                         <CurrencyLogo currency={token} size={'24px'} />
-                        <ThemedText.Body fontWeight={500}>{token.symbol}</ThemedText.Body>
+                        <ThemedText.body fontWeight={500}>{token.symbol}</ThemedText.body>
                       </AutoRow>
                       {chainId && (
                         <ExternalLink href={getExplorerLink(chainId, token.address, ExplorerDataType.ADDRESS)}>
@@ -97,20 +97,20 @@ export default function UnsupportedCurrencyFooter({
               )
             })}
             <AutoColumn gap="lg">
-              <ThemedText.Body fontWeight={500}>
+              <ThemedText.body fontWeight={500}>
                 <Trans>
                   Some assets are not available through this interface because they may not work well with the smart
                   contracts or we are unable to allow trading for legal reasons.
                 </Trans>
-              </ThemedText.Body>
+              </ThemedText.body>
             </AutoColumn>
           </AutoColumn>
         </Card>
       </Modal>
       <StyledButtonEmpty padding={'0'} onClick={() => setShowDetails(true)}>
-        <ThemedText.Blue>
+        <ThemedText.blue>
           <Trans>Read more about unsupported assets</Trans>
-        </ThemedText.Blue>
+        </ThemedText.blue>
       </StyledButtonEmpty>
     </DetailsFooter>
   )

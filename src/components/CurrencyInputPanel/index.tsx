@@ -212,9 +212,9 @@ export default function CurrencyInputPanel({
         <FixedContainer>
           <AutoColumn gap="sm" justify="center">
             <Lock />
-            <ThemedText.Label fontSize="12px" textAlign="center" padding="0 12px">
+            <ThemedText.label fontSize="12px" textAlign="center" padding="0 12px">
               <Trans>The market price is outside your specified price range. Single-asset deposit only.</Trans>
-            </ThemedText.Label>
+            </ThemedText.label>
           </AutoColumn>
         </FixedContainer>
       )}
@@ -271,7 +271,7 @@ export default function CurrencyInputPanel({
             <RowBetween>
               {account ? (
                 <RowFixed style={{ height: '17px' }}>
-                  <ThemedText.Body
+                  <ThemedText.body
                     onClick={onMax}
                     color={theme.text2}
                     fontWeight={400}
@@ -287,7 +287,7 @@ export default function CurrencyInputPanel({
                         </Trans>
                       )
                     ) : null}
-                  </ThemedText.Body>
+                  </ThemedText.body>
                   {showMaxButton && selectedCurrencyBalance ? (
                     <StyledBalanceMax onClick={onMax}>
                       <Trans>(Max)</Trans>

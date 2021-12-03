@@ -170,6 +170,10 @@ export default function Updater(): null {
   const chunkGasLimit = 100_000_000
 
   useEffect(() => {
+    const outdatedCallKeys2: string[] = JSON.parse(serializedOutdatedCallKeys)
+
+    const calls1 = outdatedCallKeys2.map((key) => parseCallKey(key))
+
     if (!latestBlockNumber || !chainId || !multicall2Contract) return
 
     const outdatedCallKeys: string[] = JSON.parse(serializedOutdatedCallKeys)

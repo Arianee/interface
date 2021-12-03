@@ -91,9 +91,9 @@ export function PrivacyPolicyModal() {
     <Modal isOpen={open} onDismiss={() => toggle()}>
       <AutoColumn gap="12px" ref={node as any}>
         <RowBetween padding="1rem 1rem 0.5rem 1rem">
-          <ThemedText.MediumHeader>
+          <ThemedText.mediumHeader>
             <Trans>Legal & Privacy</Trans>
-          </ThemedText.MediumHeader>
+          </ThemedText.mediumHeader>
           <HoverText onClick={() => toggle()}>
             <X size={24} />
           </HoverText>
@@ -122,9 +122,9 @@ export function PrivacyPolicy() {
               <RowBetween>
                 <AutoRow gap="4px">
                   <Info size={20} />
-                  <ThemedText.Main fontSize={14} color={'primaryText1'}>
+                  <ThemedText.main fontSize={14} color={'primaryText1'}>
                     <Trans>Uniswap Labs&apos; Terms of Service</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </AutoRow>
                 <StyledLinkOut size={20} />
               </RowBetween>
@@ -135,29 +135,29 @@ export function PrivacyPolicy() {
               <RowBetween>
                 <AutoRow gap="4px">
                   <Info size={20} />
-                  <ThemedText.Main fontSize={14} color={'primaryText1'}>
+                  <ThemedText.main fontSize={14} color={'primaryText1'}>
                     <Trans>Protocol Disclaimer</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </AutoRow>
                 <StyledLinkOut size={20} />
               </RowBetween>
             </ExternalLink>
           </StyledExternalCard>
         </AutoColumn>
-        <ThemedText.Main fontSize={14}>
+        <ThemedText.main fontSize={14}>
           <Trans>This app uses the following third-party APIs:</Trans>
-        </ThemedText.Main>
+        </ThemedText.main>
         <AutoColumn gap="12px">
           {EXTERNAL_APIS.map(({ name, description }, i) => (
             <DarkGreyCard key={i}>
               <AutoColumn gap="8px">
                 <AutoRow gap="4px">
                   <Info size={18} />
-                  <ThemedText.Main fontSize={14} color={'text1'}>
+                  <ThemedText.main fontSize={14} color={'text1'}>
                     {name}
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </AutoRow>
-                <ThemedText.Main fontSize={14}>{description}</ThemedText.Main>
+                <ThemedText.main fontSize={14}>{description}</ThemedText.main>
               </AutoColumn>
             </DarkGreyCard>
           ))}

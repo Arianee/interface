@@ -77,13 +77,13 @@ export default class ErrorBoundary extends React.Component<unknown, ErrorBoundar
           <BodyWrapper>
             <AutoColumn gap={'md'}>
               <SomethingWentWrongWrapper>
-                <ThemedText.Label fontSize={24} fontWeight={600}>
+                <ThemedText.label fontSize={24} fontWeight={600}>
                   <Trans>Something went wrong</Trans>
-                </ThemedText.Label>
+                </ThemedText.label>
               </SomethingWentWrongWrapper>
               <CodeBlockWrapper>
                 <code>
-                  <ThemedText.Main fontSize={10}>{error.stack}</ThemedText.Main>
+                  <ThemedText.main fontSize={10}>{error.stack}</ThemedText.main>
                 </code>
               </CodeBlockWrapper>
               {IS_UNISWAP ? (
@@ -96,18 +96,18 @@ export default class ErrorBoundary extends React.Component<unknown, ErrorBoundar
                       )}`}
                       target="_blank"
                     >
-                      <ThemedText.Link fontSize={16}>
+                      <ThemedText.link fontSize={16}>
                         <Trans>Create an issue on GitHub</Trans>
                         <span>↗</span>
-                      </ThemedText.Link>
+                      </ThemedText.link>
                     </ExternalLink>
                   </LinkWrapper>
                   <LinkWrapper>
                     <ExternalLink id="get-support-on-discord" href="https://discord.gg/FCfyBSbCU5" target="_blank">
-                      <ThemedText.Link fontSize={16}>
+                      <ThemedText.link fontSize={16}>
                         <Trans>Get support on Discord</Trans>
                         <span>↗</span>
-                      </ThemedText.Link>
+                      </ThemedText.link>
                     </ExternalLink>
                   </LinkWrapper>
                 </AutoRow>
@@ -126,7 +126,7 @@ function getRelevantState(): null | keyof AppState {
   if (!path.startsWith('#/')) {
     return null
   }
-  const pieces = path.substring(2).split(/[/\\?]/)
+  const pieces = path.substring(2).split(/[\/\\?]/)
   switch (pieces[0]) {
     case 'swap':
       return 'swap'

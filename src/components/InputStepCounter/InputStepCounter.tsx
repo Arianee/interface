@@ -57,13 +57,13 @@ const StyledInput = styled(NumericalInput)<{ usePercent?: boolean }>`
   `};
 `
 
-const InputTitle = styled(ThemedText.Small)`
+const InputTitle = styled(ThemedText.small)`
   color: ${({ theme }) => theme.text2};
   font-size: 12px;
   font-weight: 500;
 `
 
-const ButtonLabel = styled(ThemedText.White)<{ disabled: boolean }>`
+const ButtonLabel = styled(ThemedText.white)<{ disabled: boolean }>`
   color: ${({ theme, disabled }) => (disabled ? theme.text2 : theme.text1)} !important;
 `
 

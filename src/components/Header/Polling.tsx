@@ -25,7 +25,7 @@ const StyledPolling = styled.div<{ warning: boolean }>`
     display: none;
   `}
 `
-const StyledPollingNumber = styled(ThemedText.Small)<{ breathe: boolean; hovering: boolean }>`
+const StyledPollingNumber = styled(ThemedText.small)<{ breathe: boolean; hovering: boolean }>`
   transition: opacity 0.25s ease;
   opacity: ${({ breathe, hovering }) => (hovering ? 0.7 : breathe ? 1 : 0.5)};
   :hover {

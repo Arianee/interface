@@ -468,7 +468,7 @@ export default function Swap({ history }: RouteComponentProps) {
                       <AutoRouterLogo />
                       <LoadingOpacityContainer $loading={routeIsSyncing}>
                         {trade instanceof V3Trade && trade.swaps.length > 1 && (
-                          <ThemedText.Blue fontSize={14}>{trade.swaps.length} routes</ThemedText.Blue>
+                          <ThemedText.blue fontSize={14}>{trade.swaps.length} routes</ThemedText.blue>
                         )}
                       </LoadingOpacityContainer>
                     </AutoRow>
@@ -506,9 +506,9 @@ export default function Swap({ history }: RouteComponentProps) {
             <div>
               {swapIsUnsupported ? (
                 <ButtonPrimary disabled={true}>
-                  <ThemedText.Main mb="4px">
+                  <ThemedText.main mb="4px">
                     <Trans>Unsupported Asset</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </ButtonPrimary>
               ) : !account ? (
                 <ButtonLight onClick={toggleWalletModal}>
@@ -525,17 +525,17 @@ export default function Swap({ history }: RouteComponentProps) {
                 </ButtonPrimary>
               ) : routeIsSyncing || routeIsLoading ? (
                 <GreyCard style={{ textAlign: 'center' }}>
-                  <ThemedText.Main mb="4px">
+                  <ThemedText.main mb="4px">
                     <Dots>
                       <Trans>Loading</Trans>
                     </Dots>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </GreyCard>
               ) : routeNotFound && userHasSpecifiedInputOutput ? (
                 <GreyCard style={{ textAlign: 'center' }}>
-                  <ThemedText.Main mb="4px">
+                  <ThemedText.main mb="4px">
                     <Trans>Insufficient liquidity for this trade.</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                 </GreyCard>
               ) : showApproveFlow ? (
                 <AutoRow style={{ flexWrap: 'nowrap', width: '100%' }}>

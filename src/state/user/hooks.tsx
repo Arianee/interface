@@ -70,7 +70,9 @@ export function useDarkModeManager(): [boolean, () => void] {
     dispatch(updateUserDarkMode({ userDarkMode: !darkMode }))
   }, [darkMode, dispatch])
 
-  return [darkMode, toggleSetDarkMode]
+  return [true, toggleSetDarkMode]
+
+  //return [darkMode, toggleSetDarkMode]
 }
 
 export function useUserLocale(): SupportedLocale | null {

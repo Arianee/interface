@@ -26,9 +26,9 @@ export default function PresetsButtons({ setFullRange }: { setFullRange: () => v
           })
         }}
       >
-        <ThemedText.Body fontSize={12}>
+        <ThemedText.body fontSize={12}>
           <Trans>Full Range</Trans>
-        </ThemedText.Body>
+        </ThemedText.body>
       </Button>
     </AutoRow>
   )

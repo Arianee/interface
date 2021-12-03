@@ -249,27 +249,27 @@ export default function VotePage({
             {proposalData && <ProposalStatus status={proposalData.status} />}
           </RowBetween>
           <AutoColumn gap="10px" style={{ width: '100%' }}>
-            <ThemedText.LargeHeader style={{ marginBottom: '.5rem' }}>{proposalData?.title}</ThemedText.LargeHeader>
+            <ThemedText.largeHeader style={{ marginBottom: '.5rem' }}>{proposalData?.title}</ThemedText.largeHeader>
             <RowBetween>
-              <ThemedText.Main>
+              <ThemedText.main>
                 {startDate && startDate > now ? (
                   <Trans>Voting starts approximately {startDate.toLocaleString(locale, dateFormat)}</Trans>
                 ) : null}
-              </ThemedText.Main>
+              </ThemedText.main>
             </RowBetween>
             <RowBetween>
-              <ThemedText.Main>
+              <ThemedText.main>
                 {endDate &&
                   (endDate < now ? (
                     <Trans>Voting ended {endDate.toLocaleString(locale, dateFormat)}</Trans>
                   ) : (
                     <Trans>Voting ends approximately {endDate.toLocaleString(locale, dateFormat)}</Trans>
                   ))}
-              </ThemedText.Main>
+              </ThemedText.main>
             </RowBetween>
             {proposalData && proposalData.status === ProposalState.ACTIVE && !showVotingButtons && (
               <GreyCard>
-                <ThemedText.Black>
+                <ThemedText.black>
                   <Trans>
                     Only UNI votes that were self delegated or delegated to another address before block{' '}
                     {proposalData.startBlock} are eligible for voting.{' '}
@@ -282,7 +282,7 @@ export default function VotePage({
                       </Trans>
                     </span>
                   )}
-                </ThemedText.Black>
+                </ThemedText.black>
               </GreyCard>
             )}
           </AutoColumn>
@@ -317,12 +317,12 @@ export default function VotePage({
               <CardSection>
                 <AutoColumn gap="md">
                   <WrapSmall>
-                    <ThemedText.Black fontWeight={600}>
+                    <ThemedText.black fontWeight={600}>
                       <Trans>For</Trans>
-                    </ThemedText.Black>
-                    <ThemedText.Black fontWeight={600}>
+                    </ThemedText.black>
+                    <ThemedText.black fontWeight={600}>
                       {proposalData?.forCount?.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                    </ThemedText.Black>
+                    </ThemedText.black>
                   </WrapSmall>
                 </AutoColumn>
                 <ProgressWrapper>
@@ -334,12 +334,12 @@ export default function VotePage({
               <CardSection>
                 <AutoColumn gap="md">
                   <WrapSmall>
-                    <ThemedText.Black fontWeight={600}>
+                    <ThemedText.black fontWeight={600}>
                       <Trans>Against</Trans>
-                    </ThemedText.Black>
-                    <ThemedText.Black fontWeight={600}>
+                    </ThemedText.black>
+                    <ThemedText.black fontWeight={600}>
                       {proposalData?.againstCount?.toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                    </ThemedText.Black>
+                    </ThemedText.black>
                   </WrapSmall>
                 </AutoColumn>
                 <ProgressWrapper>
@@ -349,9 +349,9 @@ export default function VotePage({
             </StyledDataCard>
           </CardWrapper>
           <AutoColumn gap="md">
-            <ThemedText.MediumHeader fontWeight={600}>
+            <ThemedText.mediumHeader fontWeight={600}>
               <Trans>Details</Trans>
-            </ThemedText.MediumHeader>
+            </ThemedText.mediumHeader>
             {proposalData?.details?.map((d, i) => {
               return (
                 <DetailText key={i}>
@@ -370,17 +370,17 @@ export default function VotePage({
             })}
           </AutoColumn>
           <AutoColumn gap="md">
-            <ThemedText.MediumHeader fontWeight={600}>
+            <ThemedText.mediumHeader fontWeight={600}>
               <Trans>Description</Trans>
-            </ThemedText.MediumHeader>
+            </ThemedText.mediumHeader>
             <MarkDownWrapper>
               <ReactMarkdown source={proposalData?.description} />
             </MarkDownWrapper>
           </AutoColumn>
           <AutoColumn gap="md">
-            <ThemedText.MediumHeader fontWeight={600}>
+            <ThemedText.mediumHeader fontWeight={600}>
               <Trans>Proposer</Trans>
-            </ThemedText.MediumHeader>
+            </ThemedText.mediumHeader>
             <ProposerAddressLink
               href={
                 proposalData?.proposer && chainId

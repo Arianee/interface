@@ -227,9 +227,9 @@ function Remove({ tokenId }: { tokenId: BigNumber }) {
         </RowBetween>
         {feeValue0?.greaterThan(0) || feeValue1?.greaterThan(0) ? (
           <>
-            <ThemedText.Italic fontSize={12} color={theme.text2} textAlign="left" padding={'8px 0 0 0'}>
+            <ThemedText.italic fontSize={12} color={theme.text2} textAlign="left" padding={'8px 0 0 0'}>
               <Trans>You will also collect fees earned from this position.</Trans>
-            </ThemedText.Italic>
+            </ThemedText.italic>
             <RowBetween>
               <Text fontSize={16} fontWeight={500}>
                 <Trans>{feeValue0?.currency?.symbol} Fees Earned:</Trans>
@@ -303,18 +303,18 @@ function Remove({ tokenId }: { tokenId: BigNumber }) {
                     size={20}
                     margin={true}
                   />
-                  <ThemedText.Label
+                  <ThemedText.label
                     ml="10px"
                     fontSize="20px"
-                  >{`${feeValue0?.currency?.symbol}/${feeValue1?.currency?.symbol}`}</ThemedText.Label>
+                  >{`${feeValue0?.currency?.symbol}/${feeValue1?.currency?.symbol}`}</ThemedText.label>
                 </RowFixed>
                 <RangeBadge removed={removed} inRange={!outOfRange} />
               </RowBetween>
               <LightCard>
                 <AutoColumn gap="md">
-                  <ThemedText.Main fontWeight={400}>
+                  <ThemedText.main fontWeight={400}>
                     <Trans>Amount</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                   <RowBetween>
                     <ResponsiveHeaderText>
                       <Trans>{percentForSlider}%</Trans>
@@ -393,9 +393,9 @@ function Remove({ tokenId }: { tokenId: BigNumber }) {
 
               {showCollectAsWeth && (
                 <RowBetween>
-                  <ThemedText.Main>
+                  <ThemedText.main>
                     <Trans>Collect as WETH</Trans>
-                  </ThemedText.Main>
+                  </ThemedText.main>
                   <Toggle
                     id="receive-as-weth"
                     isActive={receiveWETH}
