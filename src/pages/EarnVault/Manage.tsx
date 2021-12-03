@@ -179,8 +179,7 @@ export default function Manage({
                 <ThemedText.White fontSize={14}>
                   <Trans>
                     {vaultInfo?.baseToken.symbol} tokens are required. Once you&apos;ve owned{' '}
-                    {vaultInfo?.baseToken.symbol}
-                    you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
+                    {vaultInfo?.baseToken.symbol} you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
                   </Trans>
                 </ThemedText.White>
               </RowBetween>
@@ -189,9 +188,9 @@ export default function Manage({
                 $borderRadius="8px"
                 width={'fit-content'}
                 as={Link}
-                to={`/add/${currencyA && currencyId(currencyA)}`}
+                to={`/swap?outputCurrency=${vaultInfo?.baseToken.address}&use=V2`}
               >
-                <Trans>Add {currencyA?.symbol} tokens</Trans>
+                <Trans>Swap {currencyA?.symbol} tokens</Trans>
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>

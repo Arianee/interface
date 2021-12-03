@@ -7,13 +7,13 @@ import { useVaultContract } from '../../hooks/useContract'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { TransactionType } from '../../state/transactions/actions'
 import { useTransactionAdder } from '../../state/transactions/hooks'
+import { VaultInfo } from '../../state/vault/hooks'
 import { CloseIcon, ThemedText } from '../../theme'
 import { ButtonError } from '../Button'
 import { AutoColumn } from '../Column'
 import Modal from '../Modal'
 import { LoadingView, SubmittedView } from '../ModalViews'
 import { RowBetween } from '../Row'
-import { VaultInfo } from '../../state/vault/hooks'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -85,7 +85,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
                 {stakingInfo?.earnedAmount?.toSignificant(6)}
               </ThemedText.Body>
               <ThemedText.Body>
-                <Trans>Unclaimed UNI</Trans>
+                <Trans>Unclaimed ${stakingInfo?.baseToken.symbol}</Trans>
               </ThemedText.Body>
             </AutoColumn>
           )}
@@ -101,7 +101,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} UNI</Trans>
+              <Trans>
+                Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} {stakingInfo?.baseToken.symbol}
+              </Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
@@ -113,7 +115,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed UNI!</Trans>
+              <Trans>Claimed {stakingInfo?.baseToken.symbol}!</Trans>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>

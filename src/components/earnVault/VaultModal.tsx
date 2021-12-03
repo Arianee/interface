@@ -211,7 +211,9 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
               <Trans>Depositing Liquidity</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>{parsedAmount?.toSignificant(4)} UNI-V2</Trans>
+              <Trans>
+                {parsedAmount?.toSignificant(4)} {vaultInfo?.baseToken.symbol}
+              </Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
