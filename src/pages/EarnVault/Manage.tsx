@@ -1,29 +1,29 @@
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import {Trans} from '@lingui/macro'
+import {CurrencyAmount, Token} from '@uniswap/sdk-core'
 import JSBI from 'jsbi'
-import { useCallback, useState } from 'react'
-import { Link, RouteComponentProps } from 'react-router-dom'
+import {useCallback, useState} from 'react'
+import {Link, RouteComponentProps} from 'react-router-dom'
 import styled from 'styled-components/macro'
-import { CountUp } from 'use-count-up'
+import {CountUp} from 'use-count-up'
 
-import { ButtonEmpty, ButtonPrimary } from '../../components/Button'
-import { AutoColumn } from '../../components/Column'
+import {ButtonEmpty, ButtonPrimary} from '../../components/Button'
+import {AutoColumn} from '../../components/Column'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
+import {CardBGImage, CardNoise, CardSection, DataCard} from '../../components/earn/styled'
 import ClaimRewardModal from '../../components/earnVault/ClaimRewardModal'
-import { CardBGImage, CardNoise, CardSection, DataCard } from '../../components/earn/styled'
 import UnstakingModal from '../../components/earnVault/UnstakingModal'
 import VaultModal from '../../components/earnVault/VaultModal'
-import { RowBetween } from '../../components/Row'
-import { BIG_INT_SECONDS_IN_WEEK, BIG_INT_ZERO } from '../../constants/misc'
-import { useColor } from '../../hooks/useColor'
+import {RowBetween} from '../../components/Row'
+import {BIG_INT_SECONDS_IN_WEEK, BIG_INT_ZERO} from '../../constants/misc'
+import {useColor} from '../../hooks/useColor'
+import {useDifferenceInDays} from '../../hooks/useDifferenceInDays'
 import usePrevious from '../../hooks/usePrevious'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useActiveWeb3React } from '../../hooks/web3'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { useVaultInfo } from '../../state/vault/hooks'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { ThemedText } from '../../theme'
-import { currencyId } from '../../utils/currencyId'
+import {useTotalSupply} from '../../hooks/useTotalSupply'
+import {useActiveWeb3React} from '../../hooks/web3'
+import {useWalletModalToggle} from '../../state/application/hooks'
+import {useVaultInfo} from '../../state/vault/hooks'
+import {useTokenBalance} from '../../state/wallet/hooks'
+import {ThemedText} from '../../theme'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -111,6 +111,7 @@ export default function Manage({
   // get WETH value of staked LP tokens
   const totalSupplyOfStakingToken = useTotalSupply(vaultInfo?.stakedAmount?.currency)
   let valueOfTotalStakedAmountInWETH: CurrencyAmount<Token> | undefined
+  const differenceInDays = useDifferenceInDays(vaultInfo?.vaultGenesis, vaultInfo?.periodFinish)
 
   const countUpAmount = vaultInfo?.earnedAmount?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
@@ -179,8 +180,7 @@ export default function Manage({
                 <ThemedText.White fontSize={14}>
                   <Trans>
                     {vaultInfo?.baseToken.symbol} tokens are required. Once you&apos;ve owned{' '}
-                    {vaultInfo?.baseToken.symbol}
-                    you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
+                    {vaultInfo?.baseToken.symbol} you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
                   </Trans>
                 </ThemedText.White>
               </RowBetween>
@@ -189,9 +189,9 @@ export default function Manage({
                 $borderRadius="8px"
                 width={'fit-content'}
                 as={Link}
-                to={`/add/${currencyA && currencyId(currencyA)}`}
+                to={`/swap?outputCurrency=${vaultInfo?.baseToken.address}&use=V2`}
               >
-                <Trans>Add {currencyA?.symbol} tokens</Trans>
+                <Trans>Swap {currencyA?.symbol} tokens</Trans>
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>
@@ -261,7 +261,7 @@ export default function Manage({
                     width="fit-content"
                     onClick={() => setShowClaimRewardModal(true)}
                   >
-                    <Trans>Claim</Trans>
+                    <Trans>Withdraw & Claim</Trans>
                   </ButtonEmpty>
                 )}
               </RowBetween>
@@ -299,9 +299,8 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          <Trans>
-            You can only withdraw at the end of staking period. When you withdraw, the contract will automagically claim
-            Aria on your behalf!
+          <Trans>Tokens staked and rewards can be linearly claimed over a period of {differenceInDays} days.
+            When you withdraw, the contract will automagically claim ${vaultInfo?.baseToken.name} on your behalf!
           </Trans>
         </ThemedText.Main>
 
@@ -322,11 +321,10 @@ export default function Manage({
                 <ButtonPrimary
                   padding="8px"
                   $borderRadius="8px"
-                  disabled={!vaultInfo?.isFinished}
                   width="160px"
-                  onClick={() => setShowUnstakingModal(true)}
+                  onClick={() => setShowClaimRewardModal(true)}
                 >
-                  <Trans>Withdraw</Trans>
+                  <Trans>Withdraw & Claim</Trans>
                 </ButtonPrimary>
               </>
             )}
