@@ -63,26 +63,16 @@ export default function EarnVault() {
             <AutoColumn gap="md">
               <RowBetween>
                 <ThemedText.White fontWeight={600}>
-                  <Trans>Uniswap liquidity mining</Trans>
+                  <Trans>Aria20 Staking</Trans>
                 </ThemedText.White>
               </RowBetween>
               <RowBetween>
                 <ThemedText.White fontSize={14}>
                   <Trans>
-                    Deposit your Liquidity Provider tokens to receive ARIA (hard coded), the Uniswap protocol governance
-                    token.
+                    Deposit your Aria20 tokens to receive Aria20 in bonus. Yield depends on vesting period.
                   </Trans>
                 </ThemedText.White>
               </RowBetween>{' '}
-              <ExternalLink
-                style={{ color: 'white', textDecoration: 'underline' }}
-                href="https://uniswap.org/blog/uni/"
-                target="_blank"
-              >
-                <ThemedText.White fontSize={14}>
-                  <Trans>Read more about UNI</Trans>
-                </ThemedText.White>
-              </ExternalLink>
             </AutoColumn>
           </CardSection>
           <CardBGImage />
@@ -93,7 +83,7 @@ export default function EarnVault() {
       <AutoColumn gap="lg" style={{ width: '100%', maxWidth: '720px' }}>
         <DataRow style={{ alignItems: 'baseline' }}>
           <ThemedText.MediumHeader style={{ marginTop: '0.5rem' }}>
-            <Trans>Participating pools</Trans>
+            <Trans>Participating vaults</Trans>
           </ThemedText.MediumHeader>
         </DataRow>
 

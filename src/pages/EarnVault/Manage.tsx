@@ -309,9 +309,9 @@ export default function Manage({
             {vaultInfo && vaultInfo.active && (
               <ButtonPrimary padding="8px" $borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {vaultInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? (
-                  <Trans>Deposit</Trans>
+                  <Trans>Deposit {vaultInfo?.baseToken.name}</Trans>
                 ) : (
-                  <Trans>Deposit Aria-V2 LP Tokens</Trans>
+                  <Trans>Deposit {vaultInfo?.baseToken.name}</Trans>
                 )}
               </ButtonPrimary>
             )}
