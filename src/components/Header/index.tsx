@@ -261,7 +261,7 @@ export default function Header() {
 
   const scrollY = useScrollPosition()
 
-  const { infoLink } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
+  const { infoLink,nativeCurrency } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
   return (
     <HeaderFrame showBackground={scrollY > 45}>
       <ClaimModal />
@@ -277,8 +277,21 @@ export default function Header() {
         <StyledNavLink id={`aria-staking-link`} to={'/staking'}>
           <Trans>Aria Staking</Trans>
         </StyledNavLink>
+        <StyledExternalLink id={`tokenomics-nav-link`} target={'_self'} href={'https://aria.fyi/about.html'}>
+          <Trans>Tokenomics</Trans>
+        </StyledExternalLink>
+        <StyledExternalLink id={`faq-nav-link`} target={'_self'} href={'https://aria.fyi/faq.html'}>
+          <Trans>FAQ</Trans>
+        </StyledExternalLink>
+        <StyledExternalLink
+          id={`get-aria-nav-link`}
+          target={'_self'}
+          href={'https://app.uniswap.org/#/swap?outputCurrency=0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9&use=V2'}
+        >
+          <Trans>Get Aria</Trans>
+          <sup>↗</sup>
+        </StyledExternalLink>
       </HeaderLinks>
-
       <HeaderControls>
         <HeaderElement>
           <NetworkSelector />
@@ -303,7 +316,7 @@ export default function Header() {
           <AccountElement active={!!account}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0, userSelect: 'none' }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                <Trans>{userEthBalance?.toSignificant(3)} ETH</Trans>
+                <Trans>{userEthBalance?.toSignificant(3)} {nativeCurrency?.symbol}</Trans>
               </BalanceText>
             ) : null}
             <Web3Status />
