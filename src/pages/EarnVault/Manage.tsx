@@ -92,7 +92,7 @@ export default function Manage({
   // get currencies and pair
 
   const vaultInfo = useVaultInfo(rewardAddress)[0]
-  const currencyA = vaultInfo?.tokens[0]
+  const currencyA = vaultInfo?.baseToken
   const vaultBaseToken: Token = vaultInfo?.baseToken
   // detect existing unstaked LP position to show add button if none found
   const userLiquidityUnstaked = useTokenBalance(account ?? undefined, vaultBaseToken)
