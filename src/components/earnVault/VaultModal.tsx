@@ -193,12 +193,10 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.LargeHeader>
-              <Trans>Depositing {vaultInfo?.baseToken.name}</Trans>
+              Depositing {vaultInfo?.baseToken.name}
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>
                 {parsedAmount?.toSignificant(4)} {vaultInfo?.baseToken.symbol}
-              </Trans>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>

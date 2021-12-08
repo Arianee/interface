@@ -122,7 +122,7 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
-            <Trans>Availaible limit</Trans>
+            <Trans>Available limit</Trans>
           </ThemedText.White>
           <ThemedText.White>
             {vaultInfo?.availableLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}

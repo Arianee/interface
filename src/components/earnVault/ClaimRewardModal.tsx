@@ -86,7 +86,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
                 {stakingInfo?.earnedAmount?.toSignificant(6)}
               </ThemedText.Body>
               <ThemedText.Body>
-                <Trans>Unclaimed {stakingInfo?.baseToken.symbol}</Trans>
+                Unclaimed {stakingInfo?.baseToken.symbol}
               </ThemedText.Body>
             </AutoColumn>
           )}
