@@ -86,7 +86,8 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
     setAttempting(true)
     if (stakingContract && parsedAmount && deadline) {
       if (approval === ApprovalState.APPROVED) {
-        await stakingContract.stake(`0x${parsedAmount.quotient.toString(16)}`, { gasLimit: 350000 })
+        const stakeResponse = await stakingContract.stake(`0x${parsedAmount.quotient.toString(16)}`, { gasLimit: 350000 })
+        setHash(stakeResponse.hash)
       } else if (signatureData) {
         stakingContract
           .stake(
@@ -103,6 +104,7 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
               token0Address: vaultInfo.baseToken.address,
               token1Address: vaultInfo.baseToken.address,
             })
+            console.log('hash', response.hash)
             setHash(response.hash)
           })
           .catch((error: any) => {
@@ -167,8 +169,6 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
             id="stake-liquidity-token"
           />
 
-
-
           <RowBetween>
             <ButtonConfirmed
               mr="0.5rem"
@@ -192,11 +192,9 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
       {attempting && !hash && (
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
-            <ThemedText.LargeHeader>
-              Depositing {vaultInfo?.baseToken.name}
-            </ThemedText.LargeHeader>
+            <ThemedText.LargeHeader>Depositing {vaultInfo?.baseToken.name}</ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-                {parsedAmount?.toSignificant(4)} {vaultInfo?.baseToken.symbol}
+              {parsedAmount?.toSignificant(4)} {vaultInfo?.baseToken.symbol}
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
