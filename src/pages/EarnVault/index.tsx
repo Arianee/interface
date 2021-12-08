@@ -8,9 +8,8 @@ import PoolCard from '../../components/earnVault/PoolCard'
 import Loader from '../../components/Loader'
 import { RowBetween } from '../../components/Row'
 import { useActiveWeb3React } from '../../hooks/web3'
-import { useVaultInfo, VAULT_REWARDS_INFO } from '../../state/vault/hooks'
-import { ExternalLink, ThemedText } from '../../theme'
-import { Countdown } from './Countdown'
+import { useStakingContractConfigs, useVaultInfo } from '../../state/vault/hooks'
+import { ThemedText } from '../../theme'
 
 const PageWrapper = styled(AutoColumn)`
   max-width: 640px;
@@ -48,6 +47,7 @@ export default function EarnVault() {
    * @todo only account for this if rewards are inactive
    */
 
+  const VAULT_REWARDS_INFO = useStakingContractConfigs()
   //const stakingInfosWithBalance = stakingInfos?.filter((s) => JSBI.greaterThan(s.stakedAmount.quotient, BIG_INT_ZERO))
   const stakingInfosWithBalance = stakingInfos
   // toggle copy if rewards are inactive
@@ -68,9 +68,7 @@ export default function EarnVault() {
               </RowBetween>
               <RowBetween>
                 <ThemedText.White fontSize={14}>
-                  <Trans>
-                    Deposit your Aria20 tokens to receive Aria20 in bonus. Yield depends on vesting period.
-                  </Trans>
+                  <Trans>Deposit your Aria20 tokens to receive Aria20 in bonus. Yield depends on vesting period.</Trans>
                 </ThemedText.White>
               </RowBetween>{' '}
             </AutoColumn>

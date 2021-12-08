@@ -1,18 +1,18 @@
-import {Trans} from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 import styled from 'styled-components/macro'
 
-import {BIG_INT_SECONDS_IN_WEEK} from '../../constants/misc'
-import {useColor} from '../../hooks/useColor'
-import {useTotalSupply} from '../../hooks/useTotalSupply'
-import {useV2Pair} from '../../hooks/useV2Pairs'
-import {VaultInfo} from '../../state/vault/hooks'
-import {StyledInternalLink, ThemedText} from '../../theme'
-import {unwrappedToken} from '../../utils/unwrappedToken'
-import {ButtonPrimary} from '../Button'
-import {AutoColumn} from '../Column'
+import { BIG_INT_SECONDS_IN_WEEK } from '../../constants/misc'
+import { useColor } from '../../hooks/useColor'
+import { useTotalSupply } from '../../hooks/useTotalSupply'
+import { useV2Pair } from '../../hooks/useV2Pairs'
+import { VaultInfo } from '../../state/vault/hooks'
+import { StyledInternalLink, ThemedText } from '../../theme'
+import { unwrappedToken } from '../../utils/unwrappedToken'
+import { ButtonPrimary } from '../Button'
+import { AutoColumn } from '../Column'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import {RowBetween} from '../Row'
-import {Break, CardBGImage, CardNoise} from './styled'
+import { RowBetween } from '../Row'
+import { Break, CardBGImage, CardNoise } from './styled'
 
 const StatContainer = styled.div`
   display: flex;
@@ -67,15 +67,12 @@ const BottomSection = styled.div<{ showBackground: boolean }>`
 `
 
 export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
-  const token0 = vaultInfo.tokens[0]
+  const token0 = vaultInfo?.baseToken
 
   const currency0 = unwrappedToken(token0)
 
   const isStaking = Boolean(vaultInfo.stakedAmount.greaterThan('0'))
   const backgroundColor = useColor(token0)
-
-  const totalSupplyOfStakingToken = useTotalSupply(vaultInfo.stakedAmount.currency)
-  const [, stakingTokenPair] = useV2Pair(...vaultInfo.tokens)
 
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
@@ -121,13 +118,17 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
           <ThemedText.White>
             <Trans>Vault Limit</Trans>
           </ThemedText.White>
-          <ThemedText.White>{vaultInfo?.vaultLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}</ThemedText.White>
+          <ThemedText.White>
+            {vaultInfo?.vaultLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
+          </ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
             <Trans>Availaible limit</Trans>
           </ThemedText.White>
-          <ThemedText.White>{vaultInfo?.availableLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}</ThemedText.White>
+          <ThemedText.White>
+            {vaultInfo?.availableLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
+          </ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
@@ -140,17 +141,7 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
             <Trans>APR</Trans>
           </ThemedText.White>
           <ThemedText.White>
-            {vaultInfo ? (
-              vaultInfo.active ? (
-                <span>
-                  {vaultInfo?.APR} %
-                </span>
-              ) : (
-                <span>0 %</span>
-              )
-            ) : (
-              '-'
-            )}
+            {vaultInfo ? vaultInfo.active ? <span>{vaultInfo?.APR} %</span> : <span>0 %</span> : '-'}
           </ThemedText.White>
         </RowBetween>
       </StatContainer>

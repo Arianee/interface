@@ -1,44 +1,61 @@
-import { Interface } from '@ethersproject/abi'
-import { Trans } from '@lingui/macro'
-import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import { abi as VAULT_ABI } from 'abis/vaultAbi.json'
+import {Interface} from '@ethersproject/abi'
+import {Trans} from '@lingui/macro'
+import {CurrencyAmount, Token} from '@uniswap/sdk-core'
+import {abi as VAULT_ABI} from 'abis/vaultAbi.json'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import JSBI from 'jsbi'
-import { ReactNode, useMemo } from 'react'
+import {ReactNode, useEffect, useMemo, useState} from 'react'
 
-import { UNI } from '../../constants/tokens'
-import { getMsDurantionInDays } from '../../hooks/useDifferenceInDays'
-import { useActiveWeb3React } from '../../hooks/web3'
-import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
-import { tryParseAmount } from '../swap/hooks'
+import {UNI} from '../../constants/tokens'
+import {getMsDurantionInDays} from '../../hooks/useDifferenceInDays'
+import {useActiveWeb3React} from '../../hooks/web3'
+import {NEVER_RELOAD, useMultipleContractSingleData} from '../multicall/hooks'
+import {tryParseAmount} from '../swap/hooks'
 
 const VAULT_REWARDS_INTERFACE = new Interface(VAULT_ABI)
 
 const ARIA_ADDRESS = '0x7f8f8bb320629bbD9e815b8C2e0D1CF00d2a427A'
 
-const stakingRewards77 = [
-  '0x128fdDC0c9805e173337732EC4ED998AfBFb100C',
-  '0x7E2Ca094F8cD16a41279c9b28ED6F7904106fbF8',
-].map((d) => {
-  const bTOken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
-  return {
-    stakingRewardAddress: d,
-    baseToken: bTOken,
-    tokens: [bTOken],
-    vaultName: 'ARIA 6-month vault',
+interface VaultJSONInterface {
+  stakingRewardAddress: string
+  baseToken: Token
+  tokens: [Token]
+  vaultName: string
+}
+let cachePromise: any
+export const useStakingContractConfigs = (): {
+  [chainId: number]: VaultJSONInterface[]
+} => {
+  const url = 'https://raw.githubusercontent.com/Arianee/aria-staking/main/contract-list.json'
+  const key = url
+  const localeData = window.localStorage.getItem(key)
+  const defaultData = {
+    137: [],
+    1: [],
+    77: [],
   }
-}) as any
+  const initialData = localeData ? JSON.parse(localeData) : defaultData
 
-export const VAULT_REWARDS_INFO: {
-  [chainId: number]: {
-    stakingRewardAddress: string
-    baseToken: Token
-    tokens: [Token]
-    vaultName: 'ARIA 6-month vault'
-  }[]
-} = {
-  137: [],
-  77: stakingRewards77,
+  const [data, setData] = useState<any>(initialData)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!cachePromise) {
+          console.log('fetching')
+          const result = await fetch(url)
+          cachePromise = result.json()
+        }
+        const jsonBody = await cachePromise
+
+        setData(jsonBody)
+        window.localStorage.setItem(key, JSON.stringify(jsonBody))
+      } catch (e) {}
+    }
+    fetchData()
+  }, [])
+
+  return data
 }
 
 export interface VaultInfo {
@@ -83,12 +100,13 @@ export interface VaultInfo {
   ) => CurrencyAmount<Token>
 }
 
-const baseToken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
-
 // gets the staking info from the network for the active chain id
 export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
+  const VAULT_REWARDS_INFO = useStakingContractConfigs()
+
+  console.log(VAULT_REWARDS_INFO)
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const info = useMemo(
@@ -163,13 +181,16 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
   )
 
   return useMemo(() => {
-    if (!chainId || !baseToken) return []
+    if (!chainId || !VAULT_REWARDS_INFO[chainId]) return []
 
     return rewardsAddresses.reduce<VaultInfo[]>((memo, rewardsAddress, index) => {
       // these two are dependent on account
       const balanceState = balances[index]
       const earnedAmountState = earnedAmounts[index]
 
+      const { chainId: tokenChainId, address, decimals, symbol, name } = VAULT_REWARDS_INFO[chainId][index].baseToken
+
+      const baseToken = new Token(tokenChainId, address, decimals, symbol, name)
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
@@ -223,7 +244,6 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
         const active = isStarted
 
         const vaultGenesisInMS = periodStartState ? periodStartState.result?.[0] * 1000 : 0
-        CurrencyAmount.fromRawAmount(baseToken, '0')
 
         const availableLimit =
           vaultLimit && totalStakedAmount
@@ -235,7 +255,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
         const APR =
           rewardRateState.result?.[0] && maturityPeriod ? (+rewardRateState.result?.[0] / maturityPeriod) * 365 : 0
 
-        const floorAPR = Math.floor(APR * 100) / 100
+        const floorAPR = Math.floor(APR)
         memo.push({
           vaultName: info[index].vaultName,
           stakingRewardAddress: rewardsAddress,
@@ -260,6 +280,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     }, [])
   }, [
     balances,
+    VAULT_REWARDS_INFO,
     chainId,
     currentBlockTimestamp,
     earnedAmounts,
@@ -267,7 +288,6 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     rewardRates,
     rewardsAddresses,
     totalSupplies,
-    baseToken,
   ])
 }
 
