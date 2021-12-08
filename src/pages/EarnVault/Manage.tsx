@@ -151,11 +151,12 @@ export default function Manage({
               <Trans>Staking Rate</Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={24} fontWeight={500}>
-              {vaultInfo?.active ? (
+              {vaultInfo?.active ? (<>
                   {vaultInfo.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
                   {vaultInfo?.baseToken.symbol} / week
+                  </>
               ) : (
-                0 / week
+                <>0 / week</>
               )}
             </ThemedText.Body>
           </AutoColumn>
@@ -175,10 +176,8 @@ export default function Manage({
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <ThemedText.White fontSize={14}>
-                  <Trans>
                     {vaultInfo?.baseToken.symbol} tokens are required. Once you&apos;ve owned{' '}
                     {vaultInfo?.baseToken.symbol} you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
-                  </Trans>
                 </ThemedText.White>
               </RowBetween>
               <ButtonPrimary
@@ -280,10 +279,14 @@ export default function Manage({
                   </span>
 
                   {vaultInfo?.active ? (
+                    <>
                       {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
                       Aria / week
+                    </>
                   ) : (
+                    <>
                     0 Aria / week
+                    </>
                   )}
                 </ThemedText.Black>
               </RowBetween>
@@ -304,9 +307,9 @@ export default function Manage({
             {vaultInfo && vaultInfo.active && (
               <ButtonPrimary padding="8px" $borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {vaultInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? (
-                  Deposit {vaultInfo?.baseToken.name}
+                  <>Deposit {vaultInfo?.baseToken.name}</>
                 ) : (
-                  Deposit {vaultInfo?.baseToken.name}
+                  <>Deposit {vaultInfo?.baseToken.name}</>
                 )}
               </ButtonPrimary>
             )}
