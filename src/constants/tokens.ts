@@ -203,7 +203,13 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     'Wrapped Matic'
   ),
 }
-
+export const ARIA20 = new Token(
+    SupportedChainId.MAINNET,
+    '0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9',
+    18,
+    'aria20',
+    'Aria'
+)
 export class ExtendedEther extends Ether {
   public get wrapped(): Token {
     if (this.chainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.chainId]

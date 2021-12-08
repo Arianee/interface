@@ -1,14 +1,14 @@
 import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list'
-import { TokenList } from '@uniswap/token-lists'
-import { useMemo } from 'react'
-import { useAppSelector } from 'state/hooks'
+import {TokenList} from '@uniswap/token-lists'
+import {useMemo} from 'react'
+import {useAppSelector} from 'state/hooks'
 import sortByListPriority from 'utils/listSort'
 
 import BROKEN_LIST from '../../constants/tokenLists/broken.tokenlist.json'
 import UNSUPPORTED_TOKEN_LIST from '../../constants/tokenLists/unsupported.tokenlist.json'
-import { AppState } from '../index'
-import { UNSUPPORTED_LIST_URLS } from './../../constants/lists'
-import { WrappedTokenInfo } from './wrappedTokenInfo'
+import {AppState} from '../index'
+import {UNSUPPORTED_LIST_URLS} from './../../constants/lists'
+import {WrappedTokenInfo} from './wrappedTokenInfo'
 
 export type TokenAddressMap = Readonly<{
   [chainId: number]: Readonly<{ [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList } }>
@@ -41,6 +41,15 @@ function listToTokenMap(list: TokenList): TokenAddressMap {
   listCache?.set(list, map)
   return map
 }
+
+DEFAULT_TOKEN_LIST.tokens.push({
+  name: 'Aria20',
+  address: '0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9',
+  symbol: 'aria20',
+  decimals: 18,
+  chainId: 1,
+  logoURI: 'https://assets.coingecko.com/coins/images/5054/small/Aria_Logo_256.png?1610097866',
+})
 
 const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(DEFAULT_TOKEN_LIST)
 

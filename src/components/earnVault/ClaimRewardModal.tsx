@@ -106,9 +106,9 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
         <LoadingView onDismiss={wrappedOnDismiss}>
           <AutoColumn gap="12px" justify={'center'}>
             <ThemedText.Body fontSize={20}>
-              <Trans>
+              <>
                 Claiming {stakingInfo?.earnedAmount?.toSignificant(6)} {stakingInfo?.baseToken.symbol}
-              </Trans>
+              </>
             </ThemedText.Body>
           </AutoColumn>
         </LoadingView>
