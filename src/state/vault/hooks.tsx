@@ -106,7 +106,6 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
 
   const VAULT_REWARDS_INFO = useStakingContractConfigs()
 
-  console.log(VAULT_REWARDS_INFO)
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const info = useMemo(

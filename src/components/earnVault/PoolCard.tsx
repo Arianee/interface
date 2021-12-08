@@ -3,8 +3,6 @@ import styled from 'styled-components/macro'
 
 import { BIG_INT_SECONDS_IN_WEEK } from '../../constants/misc'
 import { useColor } from '../../hooks/useColor'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useV2Pair } from '../../hooks/useV2Pairs'
 import { VaultInfo } from '../../state/vault/hooks'
 import { StyledInternalLink, ThemedText } from '../../theme'
 import { unwrappedToken } from '../../utils/unwrappedToken'
