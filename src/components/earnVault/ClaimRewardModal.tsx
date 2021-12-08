@@ -91,7 +91,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             </AutoColumn>
           )}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
-            <Trans>Tokens staked and rewards can be linearly claimed over a period of {stakingInfo?.maturityPeriod} days</Trans>
+            Tokens staked and rewards can be linearly claimed over a period of {stakingInfo?.maturityPeriod} days
           </ThemedText.SubHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onClaimReward}>
             {error ?? <Trans>Claim</Trans>}

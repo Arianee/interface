@@ -297,9 +297,8 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          <Trans>Tokens staked and rewards can be linearly claimed over a period of {vaultInfo?.maturityPeriod} days.
+          Tokens staked and rewards can be linearly claimed over a period of {vaultInfo?.maturityPeriod} days.
             When you withdraw, the contract will automagically claim {vaultInfo?.baseToken.name} on your behalf!
-          </Trans>
         </ThemedText.Main>
 
         {!showAddLiquidityButton && (
