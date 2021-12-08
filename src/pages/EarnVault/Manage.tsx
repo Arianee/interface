@@ -111,7 +111,6 @@ export default function Manage({
   // get WETH value of staked LP tokens
   const totalSupplyOfStakingToken = useTotalSupply(vaultInfo?.stakedAmount?.currency)
   let valueOfTotalStakedAmountInWETH: CurrencyAmount<Token> | undefined
-  const differenceInDays = useDifferenceInDays(vaultInfo?.vaultGenesis, vaultInfo?.periodFinish)
 
   const countUpAmount = vaultInfo?.earnedAmount?.toFixed(6) ?? '0'
   const countUpAmountPrevious = usePrevious(countUpAmount) ?? '0'
@@ -299,8 +298,8 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          <Trans>Tokens staked and rewards can be linearly claimed over a period of {differenceInDays} days.
-            When you withdraw, the contract will automagically claim ${vaultInfo?.baseToken.name} on your behalf!
+          <Trans>Tokens staked and rewards can be linearly claimed over a period of {vaultInfo?.maturityPeriod} days.
+            When you withdraw, the contract will automagically claim {vaultInfo?.baseToken.name} on your behalf!
           </Trans>
         </ThemedText.Main>
 

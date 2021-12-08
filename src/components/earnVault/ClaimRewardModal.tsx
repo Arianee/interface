@@ -1,20 +1,19 @@
-import { TransactionResponse } from '@ethersproject/providers'
-import { Trans } from '@lingui/macro'
-import { ReactNode, useState } from 'react'
+import {TransactionResponse} from '@ethersproject/providers'
+import {Trans} from '@lingui/macro'
+import {ReactNode, useState} from 'react'
 import styled from 'styled-components/macro'
 
-import { useVaultContract } from '../../hooks/useContract'
-import { useDifferenceInDays } from '../../hooks/useDifferenceInDays'
-import { useActiveWeb3React } from '../../hooks/web3'
-import { TransactionType } from '../../state/transactions/actions'
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { VaultInfo } from '../../state/vault/hooks'
-import { CloseIcon, ThemedText } from '../../theme'
-import { ButtonError } from '../Button'
-import { AutoColumn } from '../Column'
+import {useVaultContract} from '../../hooks/useContract'
+import {useActiveWeb3React} from '../../hooks/web3'
+import {TransactionType} from '../../state/transactions/actions'
+import {useTransactionAdder} from '../../state/transactions/hooks'
+import {VaultInfo} from '../../state/vault/hooks'
+import {CloseIcon, ThemedText} from '../../theme'
+import {ButtonError} from '../Button'
+import {AutoColumn} from '../Column'
 import Modal from '../Modal'
-import { LoadingView, SubmittedView } from '../ModalViews'
-import { RowBetween } from '../Row'
+import {LoadingView, SubmittedView} from '../ModalViews'
+import {RowBetween} from '../Row'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -70,7 +69,6 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     error = error ?? <Trans>Enter an amount</Trans>
   }
 
-  const differenceInDays = useDifferenceInDays(stakingInfo?.vaultGenesis, stakingInfo?.periodFinish)
 
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
@@ -93,7 +91,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             </AutoColumn>
           )}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
-            <Trans>Tokens staked and rewards can be linearly claimed over a period of {differenceInDays} days</Trans>
+            <Trans>Tokens staked and rewards can be linearly claimed over a period of {stakingInfo?.maturityPeriod} days</Trans>
           </ThemedText.SubHeader>
           <ButtonError disabled={!!error} error={!!error && !!stakingInfo?.stakedAmount} onClick={onClaimReward}>
             {error ?? <Trans>Claim</Trans>}

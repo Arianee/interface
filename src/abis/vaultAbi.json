@@ -8,28 +8,18 @@
           "type": "address"
         },
         {
-          "internalType": "address",
-          "name": "_rewardToken",
-          "type": "address"
-        },
-        {
           "internalType": "uint256",
           "name": "_vestingPeriod",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
+          "name": "_interestRate",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
           "name": "_vaultLimit",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_rewardLimit",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_vaultGenesis",
           "type": "uint256"
         }
       ],
@@ -44,12 +34,6 @@
           "internalType": "address",
           "name": "user",
           "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "unlockedVestedToken",
-          "type": "uint256"
         },
         {
           "indexed": false,
@@ -84,6 +68,19 @@
       "anonymous": false,
       "inputs": [
         {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Paused",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "address",
           "name": "user",
@@ -98,6 +95,33 @@
       ],
       "name": "Staked",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "Unpaused",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "interestRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -115,24 +139,24 @@
     },
     {
       "inputs": [],
-      "name": "renounceOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "rewardToken",
+      "name": "paused",
       "outputs": [
         {
-          "internalType": "contract IERC20",
+          "internalType": "bool",
           "name": "",
-          "type": "address"
+          "type": "bool"
         }
       ],
       "stateMutability": "view",
       "type": "function",
       "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "inputs": [
@@ -184,12 +208,12 @@
         },
         {
           "internalType": "uint256",
-          "name": "totalEarned",
+          "name": "claimedAmount",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
-          "name": "totalUnlockedVestedAmount",
+          "name": "totalEarned",
           "type": "uint256"
         }
       ],
@@ -255,17 +279,17 @@
     },
     {
       "inputs": [],
-      "name": "periodFinish",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "name": "pause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "unpause",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "inputs": [],
@@ -363,16 +387,16 @@
             },
             {
               "internalType": "uint256",
-              "name": "totalEarned",
+              "name": "claimedAmount",
               "type": "uint256"
             },
             {
               "internalType": "uint256",
-              "name": "totalUnlockedVestedAmount",
+              "name": "totalEarned",
               "type": "uint256"
             }
           ],
-          "internalType": "struct Vault.UserVault[]",
+          "internalType": "struct VaultV2.UserVault[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -393,12 +417,7 @@
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "unlockedVestedTokenAmount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "claimableRewardAmount",
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -432,9 +451,27 @@
           "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
         }
       ],
       "name": "rescueRewards",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "rescueEth",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
