@@ -417,7 +417,17 @@
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "claimableAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unlockedVestedTokenAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "claimableRewardAmount",
           "type": "uint256"
         }
       ],
