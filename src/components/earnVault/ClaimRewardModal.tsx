@@ -116,7 +116,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Claimed {stakingInfo?.baseToken.symbol}!</Trans>
+              Claimed {stakingInfo?.baseToken.symbol}!
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>
