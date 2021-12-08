@@ -129,7 +129,7 @@ export default function Manage({
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
         <ThemedText.MediumHeader style={{ margin: 0 }}>
-          <Trans>{currencyA?.symbol} Staking</Trans>
+          {currencyA?.symbol} Staking
         </ThemedText.MediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} size={24} />
       </RowBetween>
@@ -152,12 +152,10 @@ export default function Manage({
             </ThemedText.Body>
             <ThemedText.Body fontSize={24} fontWeight={500}>
               {vaultInfo?.active ? (
-                <Trans>
                   {vaultInfo.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
                   {vaultInfo?.baseToken.symbol} / week
-                </Trans>
               ) : (
-                <Trans>0 / week</Trans>
+                0 / week
               )}
             </ThemedText.Body>
           </AutoColumn>
@@ -282,12 +280,10 @@ export default function Manage({
                   </span>
 
                   {vaultInfo?.active ? (
-                    <Trans>
                       {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
                       Aria / week
-                    </Trans>
                   ) : (
-                    <Trans>0 Aria / week</Trans>
+                    0 Aria / week
                   )}
                 </ThemedText.Black>
               </RowBetween>
@@ -308,9 +304,9 @@ export default function Manage({
             {vaultInfo && vaultInfo.active && (
               <ButtonPrimary padding="8px" $borderRadius="8px" width="160px" onClick={handleDepositClick}>
                 {vaultInfo?.stakedAmount?.greaterThan(JSBI.BigInt(0)) ? (
-                  <Trans>Deposit {vaultInfo?.baseToken.name}</Trans>
+                  Deposit {vaultInfo?.baseToken.name}
                 ) : (
-                  <Trans>Deposit {vaultInfo?.baseToken.name}</Trans>
+                  Deposit {vaultInfo?.baseToken.name}
                 )}
               </ButtonPrimary>
             )}
@@ -331,9 +327,7 @@ export default function Manage({
         )}
         {!userLiquidityUnstaked ? null : userLiquidityUnstaked.equalTo('0') ? null : !vaultInfo?.active ? null : (
           <ThemedText.Main>
-            <Trans>
               {userLiquidityUnstaked.toSignificant(6)} {vaultInfo?.baseToken.symbol} tokens available
-            </Trans>
           </ThemedText.Main>
         )}
       </PositionInfo>
