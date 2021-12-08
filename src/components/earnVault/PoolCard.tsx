@@ -152,12 +152,12 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
           <ThemedText.White>
             {vaultInfo ? (
               vaultInfo.active ? (
-                <Trans>
+                <span>
                   {vaultInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(2, { groupSeparator: ',' })}{' '}
                   {vaultInfo?.baseToken?.name} / week
-                </Trans>
+                </span>
               ) : (
-                <Trans>0 {vaultInfo?.baseToken?.name} / week</Trans>
+                <span>0 {vaultInfo?.baseToken?.name} / week</span>
               )
             ) : (
               '-'
@@ -182,12 +182,12 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
               </span>
               {vaultInfo ? (
                 vaultInfo.active ? (
-                  <Trans>
+                  <span>
                     {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toSignificant(4, { groupSeparator: ',' })}{' '}
                     {vaultInfo?.baseToken?.name} / week
-                  </Trans>
+                  </span>
                 ) : (
-                  <Trans>0 Aria / week</Trans>
+                  <span>0 {vaultInfo?.baseToken?.name} / week</span>
                 )
               ) : (
                 '-'
