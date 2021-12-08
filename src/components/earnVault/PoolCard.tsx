@@ -1,16 +1,15 @@
-import { Trans } from '@lingui/macro'
+import {Trans} from '@lingui/macro'
 import styled from 'styled-components/macro'
 
-import { BIG_INT_SECONDS_IN_WEEK } from '../../constants/misc'
-import { useColor } from '../../hooks/useColor'
-import { VaultInfo } from '../../state/vault/hooks'
-import { StyledInternalLink, ThemedText } from '../../theme'
-import { unwrappedToken } from '../../utils/unwrappedToken'
-import { ButtonPrimary } from '../Button'
-import { AutoColumn } from '../Column'
+import {useColor} from '../../hooks/useColor'
+import {VaultInfo} from '../../state/vault/hooks'
+import {StyledInternalLink, ThemedText} from '../../theme'
+import {unwrappedToken} from '../../utils/unwrappedToken'
+import {ButtonPrimary} from '../Button'
+import {AutoColumn} from '../Column'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import { RowBetween } from '../Row'
-import { Break, CardBGImage, CardNoise } from './styled'
+import {RowBetween} from '../Row'
+import {Break, CardBGImage, CardNoise} from './styled'
 
 const StatContainer = styled.div`
   display: flex;
@@ -161,7 +160,12 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
               {vaultInfo ? (
                 vaultInfo.active ? (
                   <span>
-                    {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toSignificant(4, { groupSeparator: ',' })}{' '}
+                    {vaultInfo?.stakedAmount
+                      ?.multiply(vaultInfo?.APR)
+                      .divide(100)
+                      .divide(365)
+                      .multiply(7)
+                      .toSignificant(4, { groupSeparator: ',' })}{' '}
                     {vaultInfo?.baseToken?.name} / week
                   </span>
                 ) : (

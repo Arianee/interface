@@ -1,19 +1,19 @@
-import {TransactionResponse} from '@ethersproject/providers'
-import {Trans} from '@lingui/macro'
-import {ReactNode, useState} from 'react'
+import { TransactionResponse } from '@ethersproject/providers'
+import { Trans } from '@lingui/macro'
+import { ReactNode, useState } from 'react'
 import styled from 'styled-components/macro'
 
-import {useVaultContract} from '../../hooks/useContract'
-import {useActiveWeb3React} from '../../hooks/web3'
-import {TransactionType} from '../../state/transactions/actions'
-import {useTransactionAdder} from '../../state/transactions/hooks'
-import {VaultInfo} from '../../state/vault/hooks'
-import {CloseIcon, ThemedText} from '../../theme'
-import {ButtonError} from '../Button'
-import {AutoColumn} from '../Column'
+import { useVaultContract } from '../../hooks/useContract'
+import { useActiveWeb3React } from '../../hooks/web3'
+import { TransactionType } from '../../state/transactions/actions'
+import { useTransactionAdder } from '../../state/transactions/hooks'
+import { VaultInfo } from '../../state/vault/hooks'
+import { CloseIcon, ThemedText } from '../../theme'
+import { ButtonError } from '../Button'
+import { AutoColumn } from '../Column'
 import Modal from '../Modal'
-import {LoadingView, SubmittedView} from '../ModalViews'
-import {RowBetween} from '../Row'
+import { LoadingView, SubmittedView } from '../ModalViews'
+import { RowBetween } from '../Row'
 
 const ContentWrapper = styled(AutoColumn)`
   width: 100%;
@@ -69,7 +69,6 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     error = error ?? <Trans>Enter an amount</Trans>
   }
 
-
   return (
     <Modal isOpen={isOpen} onDismiss={wrappedOnDismiss} maxHeight={90}>
       {!attempting && !hash && (
@@ -85,9 +84,14 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
               <ThemedText.Body fontWeight={600} fontSize={36}>
                 {stakingInfo?.earnedAmount?.toSignificant(6)}
               </ThemedText.Body>
-              <ThemedText.Body>
-                Unclaimed {stakingInfo?.baseToken.symbol}
+              <ThemedText.Body>unclaimed reward {stakingInfo?.baseToken.symbol}</ThemedText.Body>
+              <ThemedText.Body fontWeight={600} fontSize={36}>
+                +
               </ThemedText.Body>
+              <ThemedText.Body fontWeight={600} fontSize={36}>
+                {stakingInfo?.unlockedVestedTokenAmount?.toSignificant(6)}
+              </ThemedText.Body>
+              <ThemedText.Body>unlocked {stakingInfo?.baseToken.symbol}</ThemedText.Body>
             </AutoColumn>
           )}
           <ThemedText.SubHeader style={{ textAlign: 'center' }}>
@@ -115,9 +119,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
             <ThemedText.LargeHeader>
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
-            <ThemedText.Body fontSize={20}>
-              Claimed {stakingInfo?.baseToken.symbol}!
-            </ThemedText.Body>
+            <ThemedText.Body fontSize={20}>Claimed {stakingInfo?.baseToken.symbol}!</ThemedText.Body>
           </AutoColumn>
         </SubmittedView>
       )}

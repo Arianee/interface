@@ -1,16 +1,16 @@
-import {Interface} from '@ethersproject/abi'
-import {Trans} from '@lingui/macro'
-import {CurrencyAmount, Token} from '@uniswap/sdk-core'
-import {abi as VAULT_ABI} from 'abis/vaultAbi.json'
+import { Interface } from '@ethersproject/abi'
+import { Trans } from '@lingui/macro'
+import { CurrencyAmount, Token } from '@uniswap/sdk-core'
+import { abi as VAULT_ABI } from 'abis/vaultAbi.json'
 import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import JSBI from 'jsbi'
-import {ReactNode, useEffect, useMemo, useState} from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 
-import {UNI} from '../../constants/tokens'
-import {getMsDurantionInDays} from '../../hooks/useDifferenceInDays'
-import {useActiveWeb3React} from '../../hooks/web3'
-import {NEVER_RELOAD, useMultipleContractSingleData} from '../multicall/hooks'
-import {tryParseAmount} from '../swap/hooks'
+import { UNI } from '../../constants/tokens'
+import { getMsDurantionInDays } from '../../hooks/useDifferenceInDays'
+import { useActiveWeb3React } from '../../hooks/web3'
+import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
+import { tryParseAmount } from '../swap/hooks'
 
 const VAULT_REWARDS_INTERFACE = new Interface(VAULT_ABI)
 
@@ -78,6 +78,10 @@ export interface VaultInfo {
   // the current amount of token distributed to the active account per second.
   // equivalent to percent of total supply * reward rate
   rewardRate: CurrencyAmount<Token>
+  // claimableAmount or claimableRewardAmount
+  claimableAmount: CurrencyAmount<Token>
+  // amount of token that was staked and can be withdraw if claim
+  unlockedVestedTokenAmount: CurrencyAmount<Token>
   // when the period ends
   isStarted: boolean
   // vault genesis
@@ -138,6 +142,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     accountArg,
     NEVER_RELOAD
   )
+
   const totalSupplies = useMultipleContractSingleData(
     rewardsAddresses,
     VAULT_REWARDS_INTERFACE,
@@ -254,12 +259,21 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
         const APR =
           rewardRateState.result?.[0] && maturityPeriod ? (+rewardRateState.result?.[0] / maturityPeriod) * 365 : 0
 
+        const claimableAmount = earnedAmountState?.result?.claimableAmount
+        const unlockedVestedTokenAmount = earnedAmountState?.result?.unlockedVestedTokenAmount
+        const claimableRewardAmount = earnedAmountState?.result?.claimableRewardAmount
+
         const floorAPR = Math.floor(APR)
         memo.push({
           vaultName: info[index].vaultName,
           stakingRewardAddress: rewardsAddress,
           tokens: info[index].tokens,
-          earnedAmount: CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
+          unlockedVestedTokenAmount: CurrencyAmount.fromRawAmount(
+            baseToken,
+            JSBI.BigInt(unlockedVestedTokenAmount ?? 0)
+          ),
+          claimableAmount: CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(claimableAmount ?? 0)),
+          earnedAmount: CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(claimableRewardAmount ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate,
           stakedAmount,
