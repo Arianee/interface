@@ -7,6 +7,7 @@ import JSBI from 'jsbi'
 import { ReactNode, useMemo } from 'react'
 
 import { UNI } from '../../constants/tokens'
+import { getMsDurantionInDays } from '../../hooks/useDifferenceInDays'
 import { useActiveWeb3React } from '../../hooks/web3'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
@@ -16,9 +17,8 @@ const VAULT_REWARDS_INTERFACE = new Interface(VAULT_ABI)
 const ARIA_ADDRESS = '0x7f8f8bb320629bbD9e815b8C2e0D1CF00d2a427A'
 
 const stakingRewards77 = [
-  '0xF025B284B20107Ac9f5003626ae1eEB3DAfa380A',
-  '0x5583A2fD7De10398EACBd37Bf3b6E7f4bDD3B20c',
-  '0xDA02b89563949C8a61eA0e827A5094f767611430',
+  '0x128fdDC0c9805e173337732EC4ED998AfBFb100C',
+  '0x7E2Ca094F8cD16a41279c9b28ED6F7904106fbF8',
 ].map((d) => {
   const bTOken = new Token(77, ARIA_ADDRESS, 18, 'ARIA20', 'ARIA20')
   return {
@@ -34,12 +34,11 @@ export const VAULT_REWARDS_INFO: {
     stakingRewardAddress: string
     baseToken: Token
     tokens: [Token]
-    vaultName: 'ARIA 6-month vault',
-
+    vaultName: 'ARIA 6-month vault'
   }[]
 } = {
-  [137]: [],
-  [77]: stakingRewards77,
+  137: [],
+  77: stakingRewards77,
 }
 
 export interface VaultInfo {
@@ -63,10 +62,6 @@ export interface VaultInfo {
   // equivalent to percent of total supply * reward rate
   rewardRate: CurrencyAmount<Token>
   // when the period ends
-  periodFinish: Date | undefined
-  // is vault finished
-  isFinished: boolean
-  // is vault finished
   isStarted: boolean
   // vault genesis
   vaultLimit: CurrencyAmount<Token>
@@ -76,6 +71,10 @@ export interface VaultInfo {
   availableLimit: CurrencyAmount<Token>
   // if pool is active
   active: boolean
+  // maturity period
+  maturityPeriod: number
+  // APR
+  APR: number
   // calculates a hypothetical amount of token distributed to the active account per second.
   getHypotheticalRewardRate: (
     stakedAmount: CurrencyAmount<Token>,
@@ -138,13 +137,6 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     undefined,
     NEVER_RELOAD
   )
-  const periodFinishes = useMultipleContractSingleData(
-    rewardsAddresses,
-    VAULT_REWARDS_INTERFACE,
-    'periodFinish',
-    undefined,
-    NEVER_RELOAD
-  )
 
   const periodStarts = useMultipleContractSingleData(
     rewardsAddresses,
@@ -162,10 +154,10 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     NEVER_RELOAD
   )
 
-  const vaultGenesises = useMultipleContractSingleData(
+  const vestingPeriods = useMultipleContractSingleData(
     rewardsAddresses,
     VAULT_REWARDS_INTERFACE,
-    'vaultGenesis',
+    'vestingPeriod',
     undefined,
     NEVER_RELOAD
   )
@@ -181,11 +173,10 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
       // these get fetched regardless of account
       const totalSupplyState = totalSupplies[index]
       const rewardRateState = rewardRates[index]
-      const periodFinishState = periodFinishes[index]
       const periodStartState = periodStarts[index]
 
       const vaultLimitState = vaultLimits[index]
-      const vaultGenesisState = vaultGenesises[index]
+      const vestingPeriodState = vestingPeriods[index]
 
       if (
         // these may be undefined if not logged in
@@ -195,17 +186,9 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
         totalSupplyState &&
         !totalSupplyState.loading &&
         rewardRateState &&
-        !rewardRateState.loading &&
-        periodFinishState &&
-        !periodFinishState.loading
+        !rewardRateState.loading
       ) {
-        if (
-          balanceState?.error ||
-          earnedAmountState?.error ||
-          totalSupplyState.error ||
-          rewardRateState.error ||
-          periodFinishState.error
-        ) {
+        if (balanceState?.error || earnedAmountState?.error || totalSupplyState.error || rewardRateState.error) {
           console.error('Failed to load staking rewards info')
           return memo
         }
@@ -231,20 +214,15 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
 
         const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, totalRewardRate)
 
-        const periodFinishSeconds = periodFinishState.result?.[0]?.toNumber()
-        const periodFinishMs = periodFinishSeconds * 1000
-
         const periodStartSeconds = periodStartState.result?.[0]?.toNumber()
 
         const isStarted =
           periodStartSeconds && currentBlockTimestamp ? periodStartSeconds < currentBlockTimestamp.toNumber() : true
-        const isFinished =
-          periodFinishSeconds && currentBlockTimestamp ? periodFinishSeconds < currentBlockTimestamp.toNumber() : true
 
         // compare period end timestamp vs current block timestamp (in seconds)
-        const active = isStarted && !isFinished
+        const active = isStarted
 
-        const vaultGenesisInMS = vaultGenesisState ? vaultGenesisState.result?.[0] * 1000 : 0
+        const vaultGenesisInMS = periodStartState ? periodStartState.result?.[0] * 1000 : 0
         CurrencyAmount.fromRawAmount(baseToken, '0')
 
         const availableLimit =
@@ -252,11 +230,16 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
             ? vaultLimit.subtract(totalStakedAmount)
             : CurrencyAmount.fromRawAmount(baseToken, '0')
 
+        const maturityPeriod = getMsDurantionInDays(vestingPeriodState?.result?.toString(), true)
+
+        const APR =
+          rewardRateState.result?.[0] && maturityPeriod ? (+rewardRateState.result?.[0] / maturityPeriod) * 365 : 0
+
+        const floorAPR = Math.floor(APR * 100) / 100
         memo.push({
           vaultName: info[index].vaultName,
           stakingRewardAddress: rewardsAddress,
           tokens: info[index].tokens,
-          periodFinish: periodFinishMs > 0 ? new Date(periodFinishMs) : undefined,
           earnedAmount: CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(earnedAmountState?.result?.[0] ?? 0)),
           rewardRate: individualRewardRate,
           totalRewardRate,
@@ -264,9 +247,10 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
           totalStakedAmount,
           getHypotheticalRewardRate,
           active,
+          APR: floorAPR,
           isStarted,
-          isFinished,
           vaultLimit,
+          maturityPeriod,
           availableLimit,
           vaultGenesis: vaultGenesisInMS > 0 ? new Date(vaultGenesisInMS) : undefined,
           baseToken,
@@ -280,7 +264,6 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     currentBlockTimestamp,
     earnedAmounts,
     info,
-    periodFinishes,
     rewardRates,
     rewardsAddresses,
     totalSupplies,

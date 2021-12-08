@@ -1,19 +1,18 @@
-import { Trans } from '@lingui/macro'
+import {Trans} from '@lingui/macro'
 import styled from 'styled-components/macro'
 
-import { BIG_INT_SECONDS_IN_WEEK } from '../../constants/misc'
-import { useColor } from '../../hooks/useColor'
-import { useDifferenceInDays } from '../../hooks/useDifferenceInDays'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useV2Pair } from '../../hooks/useV2Pairs'
-import { VaultInfo } from '../../state/vault/hooks'
-import { StyledInternalLink, ThemedText } from '../../theme'
-import { unwrappedToken } from '../../utils/unwrappedToken'
-import { ButtonPrimary } from '../Button'
-import { AutoColumn } from '../Column'
+import {BIG_INT_SECONDS_IN_WEEK} from '../../constants/misc'
+import {useColor} from '../../hooks/useColor'
+import {useTotalSupply} from '../../hooks/useTotalSupply'
+import {useV2Pair} from '../../hooks/useV2Pairs'
+import {VaultInfo} from '../../state/vault/hooks'
+import {StyledInternalLink, ThemedText} from '../../theme'
+import {unwrappedToken} from '../../utils/unwrappedToken'
+import {ButtonPrimary} from '../Button'
+import {AutoColumn} from '../Column'
 import DoubleCurrencyLogo from '../DoubleLogo'
-import { RowBetween } from '../Row'
-import { Break, CardBGImage, CardNoise } from './styled'
+import {RowBetween} from '../Row'
+import {Break, CardBGImage, CardNoise} from './styled'
 
 const StatContainer = styled.div`
   display: flex;
@@ -78,9 +77,6 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
   const totalSupplyOfStakingToken = useTotalSupply(vaultInfo.stakedAmount.currency)
   const [, stakingTokenPair] = useV2Pair(...vaultInfo.tokens)
 
-  const differenceInDays = useDifferenceInDays(vaultInfo?.vaultGenesis, vaultInfo?.periodFinish)
-  const remainingPeriod = useDifferenceInDays(new Date(), vaultInfo?.periodFinish)
-
   return (
     <Wrapper showBackground={isStaking} bgColor={backgroundColor}>
       <CardBGImage desaturate />
@@ -125,25 +121,19 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
           <ThemedText.White>
             <Trans>Vault Limit</Trans>
           </ThemedText.White>
-          <ThemedText.White>{vaultInfo?.vaultLimit.toFixed(0, { groupSeparator: ',' })}</ThemedText.White>
+          <ThemedText.White>{vaultInfo?.vaultLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}</ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
             <Trans>Availaible limit</Trans>
           </ThemedText.White>
-          <ThemedText.White>{vaultInfo?.availableLimit.toFixed(0, { groupSeparator: ',' })}</ThemedText.White>
+          <ThemedText.White>{vaultInfo?.availableLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}</ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
             <Trans>Maturity Period</Trans>
           </ThemedText.White>
-          <ThemedText.White>{differenceInDays} days</ThemedText.White>
-        </RowBetween>
-        <RowBetween>
-          <ThemedText.White>
-            <Trans>Remaining Period</Trans>
-          </ThemedText.White>
-          <ThemedText.White>{remainingPeriod} days</ThemedText.White>
+          <ThemedText.White>{vaultInfo?.maturityPeriod} days</ThemedText.White>
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
@@ -153,11 +143,10 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
             {vaultInfo ? (
               vaultInfo.active ? (
                 <span>
-                  {vaultInfo?.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(2, { groupSeparator: ',' })}{' '}
-                  {vaultInfo?.baseToken?.name} / week
+                  {vaultInfo?.APR} %
                 </span>
               ) : (
-                <span>0 {vaultInfo?.baseToken?.name} / week</span>
+                <span>0 %</span>
               )
             ) : (
               '-'
