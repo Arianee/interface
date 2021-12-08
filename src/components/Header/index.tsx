@@ -246,7 +246,7 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
 
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
   const [darkMode] = useDarkModeManager()
   const { white, black } = useTheme()
 
@@ -316,7 +316,7 @@ export default function Header() {
           <AccountElement active={!!account}>
             {account && userEthBalance ? (
               <BalanceText style={{ flexShrink: 0, userSelect: 'none' }} pl="0.75rem" pr="0.5rem" fontWeight={500}>
-                <Trans>{userEthBalance?.toSignificant(3)} {nativeCurrency?.symbol}</Trans>
+                {userEthBalance?.toSignificant(3)} {nativeCurrency?.symbol}
               </BalanceText>
             ) : null}
             <Web3Status />
