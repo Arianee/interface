@@ -14,9 +14,8 @@ import ClaimRewardModal from '../../components/earnVault/ClaimRewardModal'
 import UnstakingModal from '../../components/earnVault/UnstakingModal'
 import VaultModal from '../../components/earnVault/VaultModal'
 import {RowBetween} from '../../components/Row'
-import {BIG_INT_SECONDS_IN_WEEK, BIG_INT_ZERO} from '../../constants/misc'
+import {BIG_INT_ZERO} from '../../constants/misc'
 import {useColor} from '../../hooks/useColor'
-import {useDifferenceInDays} from '../../hooks/useDifferenceInDays'
 import usePrevious from '../../hooks/usePrevious'
 import {useTotalSupply} from '../../hooks/useTotalSupply'
 import {useActiveWeb3React} from '../../hooks/web3'
@@ -128,9 +127,7 @@ export default function Manage({
   return (
     <PageWrapper gap="lg" justify="center">
       <RowBetween style={{ gap: '24px' }}>
-        <ThemedText.MediumHeader style={{ margin: 0 }}>
-          {currencyA?.symbol} Staking
-        </ThemedText.MediumHeader>
+        <ThemedText.MediumHeader style={{ margin: 0 }}>{currencyA?.symbol} Staking</ThemedText.MediumHeader>
         <DoubleCurrencyLogo currency0={currencyA ?? undefined} size={24} />
       </RowBetween>
 
@@ -151,10 +148,16 @@ export default function Manage({
               <Trans>Staking Rate</Trans>
             </ThemedText.Body>
             <ThemedText.Body fontSize={24} fontWeight={500}>
-              {vaultInfo?.active ? (<>
-                  {vaultInfo.totalRewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
-                  {vaultInfo?.baseToken.symbol} / week
-                  </>
+              {vaultInfo?.active ? (
+                <>
+                  {vaultInfo?.stakedAmount
+                    ?.multiply(vaultInfo?.APR)
+                    .divide(100)
+                    .divide(365)
+                    .multiply(7)
+                    .toSignificant(4, { groupSeparator: ',' })}{' '}
+                  {vaultInfo?.baseToken?.name} / week {vaultInfo?.baseToken.symbol} / week
+                </>
               ) : (
                 <>0 / week</>
               )}
@@ -171,13 +174,13 @@ export default function Manage({
             <AutoColumn gap="md">
               <RowBetween>
                 <ThemedText.White fontWeight={600}>
-                  <Trans>Step 1. Get {vaultInfo?.baseToken.symbol} tokens</Trans>
+                  <>Step 1. Get {vaultInfo?.baseToken.symbol} tokens</>
                 </ThemedText.White>
               </RowBetween>
               <RowBetween style={{ marginBottom: '1rem' }}>
                 <ThemedText.White fontSize={14}>
-                    {vaultInfo?.baseToken.symbol} tokens are required. Once you&apos;ve owned{' '}
-                    {vaultInfo?.baseToken.symbol} you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
+                  {vaultInfo?.baseToken.symbol} tokens are required. Once you&apos;ve owned{' '}
+                  {vaultInfo?.baseToken.symbol} you can stake your {vaultInfo?.baseToken.symbol} tokens on this page.
                 </ThemedText.White>
               </RowBetween>
               <ButtonPrimary
@@ -187,7 +190,7 @@ export default function Manage({
                 as={Link}
                 to={`/swap?outputCurrency=${vaultInfo?.baseToken.address}&use=V2`}
               >
-                <Trans>Swap {currencyA?.symbol} tokens</Trans>
+                <>Swap {currencyA?.symbol} tokens</>
               </ButtonPrimary>
             </AutoColumn>
           </CardSection>
@@ -280,13 +283,16 @@ export default function Manage({
 
                   {vaultInfo?.active ? (
                     <>
-                      {vaultInfo.rewardRate?.multiply(BIG_INT_SECONDS_IN_WEEK)?.toFixed(0, { groupSeparator: ',' })}{' '}
-                      Aria / week
+                      {vaultInfo?.stakedAmount
+                        ?.multiply(vaultInfo?.APR)
+                        .divide(100)
+                        .divide(365)
+                        .multiply(7)
+                        .toSignificant(4, { groupSeparator: ',' })}{' '}
+                      {vaultInfo?.baseToken?.name} / week
                     </>
                   ) : (
-                    <>
-                    0 Aria / week
-                    </>
+                    <>0 Aria / week</>
                   )}
                 </ThemedText.Black>
               </RowBetween>
@@ -297,8 +303,8 @@ export default function Manage({
           <span role="img" aria-label="wizard-icon" style={{ marginRight: '8px' }}>
             ⭐️
           </span>
-          Tokens staked and rewards can be linearly claimed over a period of {vaultInfo?.maturityPeriod} days.
-            When you withdraw, the contract will automagically claim {vaultInfo?.baseToken.name} on your behalf!
+          Tokens staked and rewards can be linearly claimed over a period of {vaultInfo?.maturityPeriod} days. When you
+          withdraw, the contract will automagically claim {vaultInfo?.baseToken.name} on your behalf!
         </ThemedText.Main>
 
         {!showAddLiquidityButton && (
@@ -329,7 +335,7 @@ export default function Manage({
         )}
         {!userLiquidityUnstaked ? null : userLiquidityUnstaked.equalTo('0') ? null : !vaultInfo?.active ? null : (
           <ThemedText.Main>
-              {userLiquidityUnstaked.toSignificant(6)} {vaultInfo?.baseToken.symbol} tokens available
+            {userLiquidityUnstaked.toSignificant(6)} {vaultInfo?.baseToken.symbol} tokens available
           </ThemedText.Main>
         )}
       </PositionInfo>
