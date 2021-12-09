@@ -45,12 +45,18 @@ export const useStakingContractConfigs = (): {
           console.log('fetching')
           const result = await fetch(url)
           cachePromise = result.json()
+        } else {
+          console.log('not fetching')
+          const jsonBody = await cachePromise
+          console.log(jsonBody)
         }
         const jsonBody = await cachePromise
 
         setData(jsonBody)
         window.localStorage.setItem(key, JSON.stringify(jsonBody))
-      } catch (e) {}
+      } catch (e) {
+        console.error(e)
+      }
     }
     fetchData()
   }, [])
@@ -109,7 +115,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   const VAULT_REWARDS_INFO = useStakingContractConfigs()
-
+  console.log(VAULT_REWARDS_INFO)
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const info = useMemo(

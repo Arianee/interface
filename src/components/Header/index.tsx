@@ -246,7 +246,7 @@ const StyledExternalLink = styled(ExternalLink).attrs({
 export default function Header() {
   const { account, chainId } = useActiveWeb3React()
 
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
+  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   const [darkMode] = useDarkModeManager()
   const { white, black } = useTheme()
 
@@ -261,7 +261,7 @@ export default function Header() {
 
   const scrollY = useScrollPosition()
 
-  const { infoLink,nativeCurrency } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
+  const { infoLink, nativeCurrency } = CHAIN_INFO[chainId ? chainId : SupportedChainId.MAINNET]
   return (
     <HeaderFrame showBackground={scrollY > 45}>
       <ClaimModal />
@@ -277,6 +277,13 @@ export default function Header() {
         <StyledNavLink id={`aria-staking-link`} to={'/staking'}>
           <Trans>Aria Staking</Trans>
         </StyledNavLink>
+        <StyledNavLink
+          id={`swap-nav-link`}
+          to={'/swap?outputCurrency=0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9&use=V2'}
+        >
+          <Trans>Buy</Trans>
+        </StyledNavLink>
+
         <StyledExternalLink id={`tokenomics-nav-link`} target={'_self'} href={'https://aria.fyi/about.html'}>
           <Trans>Tokenomics</Trans>
         </StyledExternalLink>
