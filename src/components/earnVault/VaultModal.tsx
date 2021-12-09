@@ -206,7 +206,7 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
               <Trans>Transaction Submitted</Trans>
             </ThemedText.LargeHeader>
             <ThemedText.Body fontSize={20}>
-              <Trans>Deposited {parsedAmount?.toSignificant(4)} UNI-V2</Trans>
+              <>Deposited {parsedAmount?.toSignificant(4)}  {vaultInfo?.baseToken.name}</>
             </ThemedText.Body>
           </AutoColumn>
         </SubmittedView>
