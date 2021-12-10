@@ -270,7 +270,7 @@ export default function Header() {
       </Title>
       <HeaderLinks>
         <StyledNavLink id={`aria-staking-link`} to={'/staking'}>
-          <Trans>Aria Staking</Trans>
+          <Trans>Staking</Trans>
         </StyledNavLink>
         <StyledNavLink
           id={`swap-nav-link`}
