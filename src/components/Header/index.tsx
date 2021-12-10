@@ -98,13 +98,8 @@ const HeaderLinks = styled(Row)`
   grid-gap: 10px;
   overflow: auto;
   align-items: center;
+
   ${({ theme }) => theme.mediaWidth.upToLarge`
-    justify-self: start;  
-    `};
-  ${({ theme }) => theme.mediaWidth.upToMedium`
-    justify-self: center;
-  `};
-  ${({ theme }) => theme.mediaWidth.upToMedium`
     flex-direction: row;
     justify-content: space-between;
     justify-self: center;
