@@ -104,7 +104,6 @@ export default function VaultModal({ isOpen, onDismiss, vaultInfo, userLiquidity
               token0Address: vaultInfo.baseToken.address,
               token1Address: vaultInfo.baseToken.address,
             })
-            console.log('hash', response.hash)
             setHash(response.hash)
           })
           .catch((error: any) => {

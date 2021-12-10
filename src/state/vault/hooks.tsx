@@ -6,9 +6,11 @@ import useCurrentBlockTimestamp from 'hooks/useCurrentBlockTimestamp'
 import JSBI from 'jsbi'
 import { ReactNode, useEffect, useMemo, useState } from 'react'
 
+import { SupportedChainId } from '../../constants/chains'
 import { UNI } from '../../constants/tokens'
 import { getMsDurantionInDays } from '../../hooks/useDifferenceInDays'
 import { useActiveWeb3React } from '../../hooks/web3'
+import { ListenerOptions } from '../multicall/actions'
 import { NEVER_RELOAD, useMultipleContractSingleData } from '../multicall/hooks'
 import { tryParseAmount } from '../swap/hooks'
 
@@ -115,7 +117,6 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
   const { chainId, account } = useActiveWeb3React()
 
   const VAULT_REWARDS_INFO = useStakingContractConfigs()
-  console.log(VAULT_REWARDS_INFO)
   // detect if staking is ended
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const info = useMemo(
@@ -132,13 +133,17 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
 
   const accountArg = useMemo(() => [account ?? undefined], [account])
 
+  const blocksPerFetch = chainId === SupportedChainId.MAINNET ? 1 : 3
+  const reloadTime: ListenerOptions = {
+    blocksPerFetch,
+  }
   // get all the info from the staking rewards contracts
   const balances = useMultipleContractSingleData(
     rewardsAddresses,
     VAULT_REWARDS_INTERFACE,
     'balanceOf',
     accountArg,
-    NEVER_RELOAD
+    reloadTime
   )
 
   const earnedAmounts = useMultipleContractSingleData(
@@ -146,7 +151,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     VAULT_REWARDS_INTERFACE,
     'earned',
     accountArg,
-    NEVER_RELOAD
+    reloadTime
   )
 
   const totalSupplies = useMultipleContractSingleData(
@@ -154,7 +159,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     VAULT_REWARDS_INTERFACE,
     'totalSupply',
     undefined,
-    NEVER_RELOAD
+    reloadTime
   )
   // tokens per second, constants
 

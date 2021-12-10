@@ -105,7 +105,7 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
-            <Trans>Total deposited</Trans>
+            <Trans>Your Total Deposit</Trans>
           </ThemedText.White>
           <ThemedText.White>
             {vaultInfo?.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
