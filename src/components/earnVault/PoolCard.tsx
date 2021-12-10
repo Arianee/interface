@@ -105,18 +105,18 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
         </RowBetween>
         <RowBetween>
           <ThemedText.White>
-            <Trans>Your Total Deposit</Trans>
-          </ThemedText.White>
-          <ThemedText.White>
-            {vaultInfo?.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
-          </ThemedText.White>
-        </RowBetween>
-        <RowBetween>
-          <ThemedText.White>
             <Trans>Vault Limit</Trans>
           </ThemedText.White>
           <ThemedText.White>
             {vaultInfo?.vaultLimit.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
+          </ThemedText.White>
+        </RowBetween>
+        <RowBetween>
+          <ThemedText.White>
+            <Trans>Total deposited</Trans>
+          </ThemedText.White>
+          <ThemedText.White>
+            {vaultInfo?.totalStakedAmount.toFixed(0, { groupSeparator: ',' })} {vaultInfo?.baseToken.symbol}
           </ThemedText.White>
         </RowBetween>
         <RowBetween>

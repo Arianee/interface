@@ -154,10 +154,10 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     reloadTime
   )
 
-  const totalSupplies = useMultipleContractSingleData(
+  const totalDeposits = useMultipleContractSingleData(
     rewardsAddresses,
     VAULT_REWARDS_INTERFACE,
-    'totalSupply',
+    'totalDeposits',
     undefined,
     reloadTime
   )
@@ -207,7 +207,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
 
       const baseToken = new Token(tokenChainId, address, decimals, symbol, name)
       // these get fetched regardless of account
-      const totalSupplyState = totalSupplies[index]
+      const totalSupplyState = totalDeposits[index]
       const rewardRateState = rewardRates[index]
       const periodStartState = periodStarts[index]
 
@@ -231,7 +231,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
 
         // check for account, if no account set to 0
         const stakedAmount = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(balanceState?.result?.[0] ?? 0))
-        const totalStakedAmount = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(totalSupplyState.result?.[0]))
+        const totalDeposit = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(totalSupplyState.result?.[0]))
         const totalRewardRate = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(rewardRateState.result?.[0]))
         const vaultLimit = CurrencyAmount.fromRawAmount(baseToken, JSBI.BigInt(vaultLimitState.result?.[0]))
 
@@ -248,7 +248,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
           )
         }
 
-        const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalStakedAmount, totalRewardRate)
+        const individualRewardRate = getHypotheticalRewardRate(stakedAmount, totalDeposit, totalRewardRate)
 
         const periodStartSeconds = periodStartState.result?.[0]?.toNumber()
 
@@ -261,8 +261,8 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
         const vaultGenesisInMS = periodStartState ? periodStartState.result?.[0] * 1000 : 0
 
         const availableLimit =
-          vaultLimit && totalStakedAmount
-            ? vaultLimit.subtract(totalStakedAmount)
+          vaultLimit && totalDeposit
+            ? vaultLimit.subtract(totalDeposit)
             : CurrencyAmount.fromRawAmount(baseToken, '0')
 
         const maturityPeriod = getMsDurantionInDays(vestingPeriodState?.result?.toString(), true)
@@ -288,7 +288,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
           rewardRate: individualRewardRate,
           totalRewardRate,
           stakedAmount,
-          totalStakedAmount,
+          totalStakedAmount: totalDeposit,
           getHypotheticalRewardRate,
           active,
           APR: floorAPR,
@@ -311,7 +311,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
     info,
     rewardRates,
     rewardsAddresses,
-    totalSupplies,
+    totalDeposits,
   ])
 }
 
