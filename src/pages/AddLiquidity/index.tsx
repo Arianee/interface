@@ -7,7 +7,7 @@ import DowntimeWarning from 'components/DowntimeWarning'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { AlertTriangle } from 'react-feather'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import {

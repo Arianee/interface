@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/macro'
 import React, { ErrorInfo } from 'react'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import styled from 'styled-components/macro'
 
 import store, { AppState } from '../../state'
@@ -60,11 +60,13 @@ export default class ErrorBoundary extends React.Component<unknown, ErrorBoundar
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    /*
     ReactGA.exception({
       ...error,
       ...errorInfo,
       fatal: true,
     })
+    */
   }
 
   render() {

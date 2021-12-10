@@ -8,7 +8,7 @@ import Row, { AutoRow, RowBetween } from 'components/Row'
 import { useWalletConnectMonitoringEventCallback } from 'hooks/useMonitoringEventCallback'
 import { useEffect, useState } from 'react'
 import { ArrowLeft, ArrowRight, Info } from 'react-feather'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import styled from 'styled-components/macro'
 
 import MetamaskIcon from '../../assets/images/metamask.png'
