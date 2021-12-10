@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { useCallback, useEffect } from 'react'
 import { Heart, X } from 'react-feather'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import styled, { keyframes } from 'styled-components/macro'
 
 import tokenLogo from '../../assets/images/token-logo.png'

@@ -6,7 +6,7 @@ import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter
 import { SwitchLocaleLink } from 'components/SwitchLocaleLink'
 import { useCallback, useContext, useState } from 'react'
 import { Plus } from 'react-feather'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
 import { RouteComponentProps } from 'react-router-dom'
 import { Text } from 'rebass'
 import { ThemeContext } from 'styled-components/macro'
