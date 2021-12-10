@@ -156,7 +156,7 @@ export default function Manage({
                     .divide(365)
                     .multiply(7)
                     .toSignificant(4, { groupSeparator: ',' })}{' '}
-                  {vaultInfo?.baseToken?.name} / week {vaultInfo?.baseToken.symbol} / week
+                  {vaultInfo?.baseToken?.name} / week
                 </>
               ) : (
                 <>0 / week</>
