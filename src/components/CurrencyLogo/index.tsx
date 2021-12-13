@@ -19,23 +19,33 @@ function chainIdToNetworkName(networkId: SupportedChainId): Network {
     case SupportedChainId.OPTIMISM:
       return 'optimism'
     case SupportedChainId.POLYGON:
-      return 'polygon'      
+      return 'polygon'
     default:
       return 'ethereum'
   }
 }
 
+const arias = [
+  '0xedf6568618a00c6f0908bf7758a16f76b6e04af9', // mainnet
+  '0x46f48fbdedaa6f5500993bede9539ef85f4bee8e', // polygon
+  '0x7f8f8bb320629bbD9e815b8C2e0D1CF00d2a427A', // sokol testing
+].map((d) => d.toLowerCase())
 export const getTokenLogoURL = (
   address: string,
   chainId: SupportedChainId = SupportedChainId.MAINNET
 ): string | void => {
   const networkName = chainIdToNetworkName(chainId)
-  const networksWithUrls = [SupportedChainId.ARBITRUM_ONE, SupportedChainId.MAINNET, SupportedChainId.OPTIMISM, SupportedChainId.POLYGON]
-  if (networksWithUrls.includes(chainId)) {
-    
-    return `https://storage.googleapis.com/zapper-fi-assets/tokens/${networkName}/${address}.png`
-  } else {
+  const networksWithUrls = [
+    SupportedChainId.ARBITRUM_ONE,
+    SupportedChainId.MAINNET,
+    SupportedChainId.OPTIMISM,
+    SupportedChainId.POLYGON,
+  ]
+  const isAria = arias.includes(address.toLowerCase())
+  if (isAria) {
     return `https://storage.googleapis.com/zapper-fi-assets/tokens/polygon/0x46f48fbdedaa6f5500993bede9539ef85f4bee8e.png`
+  } else if (networksWithUrls.includes(chainId)) {
+    return `https://storage.googleapis.com/zapper-fi-assets/tokens/${networkName}/${address}.png`
   }
 }
 

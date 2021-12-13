@@ -16,8 +16,6 @@ import { tryParseAmount } from '../swap/hooks'
 
 const VAULT_REWARDS_INTERFACE = new Interface(VAULT_ABI)
 
-const ARIA_ADDRESS = '0x7f8f8bb320629bbD9e815b8C2e0D1CF00d2a427A'
-
 interface VaultJSONInterface {
   stakingRewardAddress: string
   baseToken: Token

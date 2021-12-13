@@ -1,4 +1,4 @@
-import { SupportedChainId } from '../constants/chains'
+import {SupportedChainId} from '../constants/chains'
 
 const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
   [SupportedChainId.MAINNET]: '',
@@ -35,6 +35,35 @@ export function getExplorerLink(chainId: number, data: string, type: ExplorerDat
         return `https://arbiscan.io/block/${data}`
       default:
         return `https://arbiscan.io/`
+    }
+  }
+
+  if (chainId === SupportedChainId.POLYGON) {
+    const root = 'https://polygonscan.com'
+    switch (type) {
+      case ExplorerDataType.TRANSACTION:
+        return `${root}/tx/${data}`
+      case ExplorerDataType.ADDRESS:
+      case ExplorerDataType.TOKEN:
+        return `${root}/address/${data}`
+      case ExplorerDataType.BLOCK:
+        return `${root}/block/${data}`
+      default:
+        return `${root}`
+    }
+  }
+  if (chainId === SupportedChainId.SOKOL) {
+    const root = 'https://blockscout.com/poa/sokol'
+    switch (type) {
+      case ExplorerDataType.TRANSACTION:
+        return `${root}/tx/${data}`
+      case ExplorerDataType.ADDRESS:
+      case ExplorerDataType.TOKEN:
+        return `${root}/address/${data}`
+      case ExplorerDataType.BLOCK:
+        return `${root}/block/${data}`
+      default:
+        return `${root}`
     }
   }
 
