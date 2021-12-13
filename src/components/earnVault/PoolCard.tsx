@@ -92,19 +92,6 @@ export default function PoolCard({ vaultInfo }: { vaultInfo: VaultInfo }) {
       <StatContainer>
         <RowBetween>
           <ThemedText.White>
-            <Trans>Launch Date</Trans>
-          </ThemedText.White>
-          <ThemedText.White>
-            {vaultInfo?.vaultGenesis?.toLocaleDateString('en', {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}{' '}
-          </ThemedText.White>
-        </RowBetween>
-        <RowBetween>
-          <ThemedText.White>
             <Trans>Vault Limit</Trans>
           </ThemedText.White>
           <ThemedText.White>
