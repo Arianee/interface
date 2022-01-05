@@ -35,7 +35,6 @@ export const useStakingContractConfigs = (): {
     77: [],
   }
   const initialData = localeData ? JSON.parse(localeData) : defaultData
-
   const [data, setData] = useState<any>(initialData)
 
   useEffect(() => {
@@ -43,8 +42,7 @@ export const useStakingContractConfigs = (): {
       try {
         if (!cachePromise) {
           console.log('fetching')
-          const result = await fetch(url)
-          cachePromise = result.json()
+          cachePromise = fetch(url).then((d) => d.json())
         } else {
           console.log('not fetching')
           const jsonBody = await cachePromise
@@ -124,7 +122,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
             stackingRewarAddress === undefined ? true : stackingRewarAddress === stakingRewardInfo.stakingRewardAddress
           ) ?? []
         : [],
-    [chainId, stackingRewarAddress]
+    [chainId, stackingRewarAddress, VAULT_REWARDS_INFO]
   )
 
   const rewardsAddresses = useMemo(() => info.map(({ stakingRewardAddress }) => stakingRewardAddress), [info])
@@ -259,9 +257,7 @@ export function useVaultInfo(stackingRewarAddress?: string): VaultInfo[] {
         const vaultGenesisInMS = periodStartState ? periodStartState.result?.[0] * 1000 : 0
 
         const availableLimit =
-          vaultLimit && totalDeposit
-            ? vaultLimit.subtract(totalDeposit)
-            : CurrencyAmount.fromRawAmount(baseToken, '0')
+          vaultLimit && totalDeposit ? vaultLimit.subtract(totalDeposit) : CurrencyAmount.fromRawAmount(baseToken, '0')
 
         const maturityPeriod = getMsDurantionInDays(vestingPeriodState?.result?.toString(), true)
 
