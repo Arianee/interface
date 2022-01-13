@@ -46,7 +46,7 @@ export default function ClaimRewardModal({ isOpen, onDismiss, stakingInfo }: Sta
     if (vaultContract && stakingInfo?.stakedAmount && account) {
       setAttempting(true)
       await vaultContract
-        .claim({ gasLimit: 1_500_000 })
+        .claim()
         .then((response: TransactionResponse) => {
           addTransaction(response, {
             type: TransactionType.CLAIM,
