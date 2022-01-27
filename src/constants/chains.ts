@@ -104,7 +104,7 @@ export const CHAIN_INFO: ChainInfo = {
     label: 'POLYGON',
     logoUrl: 'https://zapper.fi/images/networks/polygon-icon.png',
     nativeCurrency: { name: 'MATIC', symbol: 'matic', decimals: 18 },
-    rpcUrls: ['https://speedy-nodes-nyc.moralis.io/337ce5317ffe1f66093a6c3b/polygon/mainnet'],
+    rpcUrls: ['https://polygon.spkz.io'],
   },
   [SupportedChainId.ARBITRUM_ONE]: {
     blockWaitMsBeforeWarning: ms`10m`,
