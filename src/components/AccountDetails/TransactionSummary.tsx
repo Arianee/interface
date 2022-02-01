@@ -76,7 +76,7 @@ function ClaimSummary({ info: { recipient, uniAmountRaw } }: { info: ClaimTransa
       {ENSName ?? recipient}
     </Trans>
   ) : (
-    <Trans>Claim UNI reward for {ENSName ?? recipient}</Trans>
+    <Trans>Claim reward for {ENSName ?? recipient}</Trans>
   )
 }
 
