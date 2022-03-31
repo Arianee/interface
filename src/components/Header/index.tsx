@@ -274,7 +274,7 @@ export default function Header() {
         </StyledNavLink>
         <StyledNavLink
           id={`swap-nav-link`}
-          to={'/swap?outputCurrency=0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9&use=V2'}
+          to={'/swap?outputCurrency=0xeDF6568618A00C6F0908Bf7758A16F76B6E04aF9&use=V3'}
         >
           <Trans>Buy Aria</Trans>
         </StyledNavLink>
