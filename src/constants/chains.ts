@@ -102,7 +102,7 @@ export const CHAIN_INFO: ChainInfo = {
     explorer: 'https://polygonscan.com/',
     infoLink: '',
     label: 'POLYGON',
-    logoUrl: 'https://zapper.fi/images/networks/polygon-icon.png',
+    logoUrl: 'https://polygonscan.com/images/svg/brands/polygon.svg?v=1.4',
     nativeCurrency: { name: 'MATIC', symbol: 'matic', decimals: 18 },
     rpcUrls: ['https://polygon.spkz.io'],
   },
